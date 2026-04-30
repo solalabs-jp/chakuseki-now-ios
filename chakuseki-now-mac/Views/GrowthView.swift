@@ -2,7 +2,7 @@ import SwiftUI
 
 struct GrowthView: View {
     var body: some View {
-        VStack{
+        VStack {
             Text("成長確認画面")
         }
     }

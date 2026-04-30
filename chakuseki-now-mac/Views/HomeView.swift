@@ -2,7 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        VStack{
+        VStack {
             Text("ホーム画面")
         }
         
