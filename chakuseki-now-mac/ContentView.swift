@@ -19,10 +19,10 @@ struct ContentView: View {
             .tag(1)
             
         GrowthView()
-                .tabItem{
-                    Label("成長",systemImage: "chart.line.uptrend.xyaxis")
-                }
-                .tag(2)
+            .tabItem{
+                Label("成長",systemImage: "chart.line.uptrend.xyaxis")
+            }
+            .tag(2)
     }
         
     .padding()
