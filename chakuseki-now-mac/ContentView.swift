@@ -1,16 +1,31 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var selectedTab = 0
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-        }
-        .padding()
+        TabView(selection: $selectedTab){
+        
+        HomeView()
+            .tabItem {
+                Label("ホーム",systemImage: "house")
+            }
+            .tag(0)
+        
+        HistoryView()
+            .tabItem {
+                Label("履歴",systemImage: "clock")
+            }
+            .tag(1)
+            
+        GrowthView()
+                .tabItem{
+                    Label("成長",systemImage: "chart.line.uptrend.xyaxis")
+                }
+                .tag(2)
+    }
+        
+    .padding()
     }
 }
 
