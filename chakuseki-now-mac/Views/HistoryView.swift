@@ -114,7 +114,7 @@ struct HistoryDetailView: View {
             }
             
             List {
-                ForEach(attendanceRecords) { record in
+                ForEach(attendanceRecords.reversed()) { record in
                     HStack {
                         Text("第\(record.sessionNumber)回")
                         Spacer()

@@ -14,7 +14,7 @@ struct ContentView: View {
         
         HistoryView()
             .tabItem {
-                Label("履歴",systemImage: "clock")
+                Label("時間割",systemImage: "calendar")
             }
             .tag(1)
             
