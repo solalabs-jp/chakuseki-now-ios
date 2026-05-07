@@ -9,7 +9,7 @@ struct HomeView: View {
         VStack(alignment: .leading) {
             
             HStack {
-                Text(submittedAnswer != nil ? "出席しました" : "おはようございます")
+                GreetingView(isAttended: submittedAnswer != nil)
                 Spacer() 
                 
             }
