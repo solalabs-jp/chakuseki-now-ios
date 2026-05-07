@@ -2,12 +2,14 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var currentStatus: StatusView.Status = .searching
+    @State private var submittedAnswer: String? = nil
+    @State private var submittedTime: Date? = nil
 
     var body: some View {
         VStack(alignment: .leading) {
             
             HStack {
-                Text("おはようございます")
+                Text(submittedAnswer != nil ? "出席しました" : "おはようございます")
                 Spacer() 
                 
             }
@@ -35,16 +37,21 @@ struct HomeView: View {
 } else {
                     // 接続成功時の表示
                     VStack {
-                        
-                        MessageInputField { sentText in
-                        print("送信されました: \(sentText)")
-            }
+                        if let answer = submittedAnswer, let time = submittedTime {
+                            AttendanceResultView(answer: answer, time: time)
+                        } else {
+                            MessageInputField { sentText in
+                                print("送信されました: \(sentText)")
+                                submittedAnswer = sentText
+                                submittedTime = Date()
+                            }
+                        }
                     }
                 }
             }
             .frame(maxWidth: .infinity) // 横幅いっぱいにして中央揃えにする
 
-            Spacer() // 🌟 下にもSpacerを入れることで、上下から挟んで真ん中に固定されます
+            Spacer() 
         }
         .padding()
     }
