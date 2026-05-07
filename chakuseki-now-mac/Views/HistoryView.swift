@@ -1,8 +1,9 @@
 import SwiftUI
+import Charts
 
 struct HistoryView: View {
     @State private var currentDate: Date = .now
-    @State private var selectedDate: Date? = nil
+    @State private var selectedDate: Date? = .now
 
     var body: some View {
         NavigationStack {
@@ -21,100 +22,108 @@ struct SelectedDateDisplayView: View {
     let date: Date?
     
     var body: some View {
+        let displayDate = date ?? .now
         VStack {
-            if let date = date {
-                Text(date.formatted(.dateTime.year().month().day().weekday(.wide).locale(Locale(identifier: "ja_JP"))))
-                
-                List {
-                    NavigationLink(destination: HistoryDetailView(date: date)) {
-                        HStack {
-                            Text("AWS演習")
-                            Spacer()
-                            Text("詳細")
-                                .foregroundColor(.accentColor)
-                        }
-                    }
-                    NavigationLink(destination: HistoryDetailView(date: date)) {
-                        HStack {
-                            Text("テスト")
-                            Spacer()
-                            Text("詳細")
-                                .foregroundColor(.accentColor)
-                        }
-                    }
-                    NavigationLink(destination: HistoryDetailView(date: date)) {
-                        HStack {
-                            Text("テスト")
-                            Spacer()
-                            Text("詳細")
-                                .foregroundColor(.accentColor)
-                        }
-                    }
-                    NavigationLink(destination: HistoryDetailView(date: date)) {
-                        HStack {
-                            Text("テスト")
-                            Spacer()
-                            Text("詳細")
-                                .foregroundColor(.accentColor)
-                        }
+            Text(displayDate.formatted(.dateTime.year().month().day().weekday(.wide).locale(Locale(identifier: "ja_JP"))))
+            
+            List {
+                NavigationLink(destination: HistoryDetailView(subjectName: "AWS演習", date: displayDate)) {
+                    HStack {
+                        Text("AWS演習")
+                        Spacer()
+                        Text("詳細")
+                            .foregroundColor(.accentColor)
                     }
                 }
-            } else {
-                Text("日付が選択されていません")
+                NavigationLink(destination: HistoryDetailView(subjectName: "テスト", date: displayDate)) {
+                    HStack {
+                        Text("テスト")
+                        Spacer()
+                        Text("詳細")
+                            .foregroundColor(.accentColor)
+                    }
+                }
+                NavigationLink(destination: HistoryDetailView(subjectName: "テスト", date: displayDate)) {
+                    HStack {
+                        Text("テスト")
+                        Spacer()
+                        Text("詳細")
+                            .foregroundColor(.accentColor)
+                    }
+                }
+                NavigationLink(destination: HistoryDetailView(subjectName: "テスト", date: displayDate)) {
+                    HStack {
+                        Text("テスト")
+                        Spacer()
+                        Text("詳細")
+                            .foregroundColor(.accentColor)
+                    }
+                }
             }
         }
     }
 }
 
-struct Person: Identifiable {
-    let id = UUID()
-    var name: String
-    var phoneNumber: String
-}
-
-struct Department: Identifiable {
-    let id = UUID()
-    var name: String
-    var staff: [Person]
-}
-
-struct Company {
-    var departments: [Department]
-}
-
 struct HistoryDetailView: View {
+    let subjectName: String
     let date: Date
     
     // サンプルデータ
-    let company = Company(departments: [
-        Department(name: "Sales", staff: [
-            Person(name: "Juan Chavez", phoneNumber: "(408) 555-4301"),
-            Person(name: "Mei Chen", phoneNumber: "(919) 555-2481")
-        ]),
-        Department(name: "Engineering", staff: [
-            Person(name: "Bill James", phoneNumber: "(408) 555-4450"),
-            Person(name: "Anne Johnson", phoneNumber: "(417) 555-9311")
-        ])
-    ])
+    let attendanceRecords: [AttendanceRecord] = [
+        AttendanceRecord(sessionNumber: 1, date: .now, status: .attendance),
+        AttendanceRecord(sessionNumber: 2, date: .now, status: .tardiness),
+        AttendanceRecord(sessionNumber: 3, date: .now, status: .earlyDeparture),
+        AttendanceRecord(sessionNumber: 4, date: .now, status: .absence),
+        AttendanceRecord(sessionNumber: 5, date: .now, status: .officialAbsence),
+        AttendanceRecord(sessionNumber: 6, date: .now, status: .bereavement),
+        AttendanceRecord(sessionNumber: 7, date: .now, status: .attendance),
+        AttendanceRecord(sessionNumber: 8, date: .now, status: .attendance)
+    ]
+    
+    let totalSessions = 15 // 全講義回数（サンプル）
+    
+    var statusSummary: [(status: AttendanceStatus, count: Int)] {
+        let counts = Dictionary(grouping: attendanceRecords, by: { $0.status })
+            .mapValues { $0.count }
+        return AttendanceStatus.allCases.compactMap { status in
+            guard let count = counts[status], count > 0 else { return nil }
+            return (status, count)
+        }
+    }
     
     var body: some View {
         VStack {
-            Text(date.formatted(.dateTime.year().month().day().weekday(.wide).locale(Locale(identifier: "ja_JP"))))
+            Text(subjectName)
+            
+            Chart(statusSummary, id: \.status) { item in
+                SectorMark(
+                    angle: .value("回数", item.count),
+                    innerRadius: .ratio(0.5)
+                )
+                .foregroundStyle(by: .value("状態", item.status.rawValue))
+            }
+            .frame(height: 200)
+            .chartBackground { chartProxy in
+                GeometryReader { geometry in
+                    if let plotFrame = chartProxy.plotFrame {
+                        let frame = geometry[plotFrame]
+                        Text("\(attendanceRecords.count) / \(totalSessions)")
+                            .position(x: frame.midX, y: frame.midY)
+                    }
+                }
+            }
             
             List {
-                ForEach(company.departments) { dept in
-                    Section(header: Text(dept.name)) {
-                        ForEach(dept.staff) { person in
-                            HStack {
-                                Text(person.name)
-                                Spacer()
-                                Text(person.phoneNumber)
-                            }
-                        }
+                ForEach(attendanceRecords) { record in
+                    HStack {
+                        Text("第\(record.sessionNumber)回")
+                        Spacer()
+                        Text(record.status.rawValue)
                     }
                 }
             }
         }
+        .navigationTitle("出席状況")
     }
 }
 
