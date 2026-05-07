@@ -20,7 +20,7 @@ struct ContentView: View {
             
         GrowthView()
             .tabItem{
-                Label("成長",systemImage: "chart.line.uptrend.xyaxis")
+                Label("マイページ",systemImage: "chart.line.uptrend.xyaxis")
             }
             .tag(2)
     }
