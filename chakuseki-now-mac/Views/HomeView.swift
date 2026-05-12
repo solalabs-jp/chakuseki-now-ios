@@ -13,7 +13,8 @@ struct HomeView: View {
                 Spacer() 
                 
             }
-            StatusView(status: currentStatus, targetName: "先生の信号")
+            StatusView(status: currentStatus, isAttended: submittedAnswer != nil)
+                .padding(.horizontal, -16)
 
             Spacer() 
 
@@ -45,6 +46,7 @@ struct HomeView: View {
                                 submittedAnswer = sentText
                                 submittedTime = Date()
                             }
+                            .padding(.horizontal, -16)
                         }
                     }
                 }
