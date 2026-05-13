@@ -8,9 +8,10 @@ struct HistoryView: View {
         NavigationStack {
             ScrollView {
                 VStack {
-                    Text("履歴")
-                        .font(.largeTitle)
+                    Text("履歴を確認しよう")
+                        .font(.title)
                         .fontWeight(.bold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()
 
                     CustomCalendarView(currentDate: $currentDate, selectedDate: $selectedDate)

@@ -6,9 +6,10 @@ struct SelectedDateDisplayView: View {
     var body: some View {
         let displayDate = date ?? .now
         VStack(spacing: 16) {
-            Text(displayDate.formatted(.dateTime.year().month().day().weekday(.wide).locale(CalendarStyle.locale)))
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+            Text(displayDate.formatted(.dateTime.month().day().weekday(.abbreviated).locale(CalendarStyle.locale)))
+                .font(.headline)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding([.top,.leading], 16)
             
             VStack(spacing: 0) {
                 SubjectRowView(subjectName: "AWS演習", date: displayDate, status: .attendance)
