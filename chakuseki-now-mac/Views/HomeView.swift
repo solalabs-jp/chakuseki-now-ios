@@ -40,6 +40,7 @@ struct HomeView: View {
                     VStack {
                         if let answer = submittedAnswer, let time = submittedTime {
                             AttendanceResultView(answer: answer, time: time)
+                                .padding(.horizontal, -16)
                         } else {
                             MessageInputField { sentText in
                                 print("送信されました: \(sentText)")
