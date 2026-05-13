@@ -3,14 +3,15 @@ import SwiftUI
 struct SubjectRowView: View {
     let subjectName: String
     let date: Date
+    let status: AttendanceStatus
 
     var body: some View {
         NavigationLink(destination: HistoryDetailView(subjectName: subjectName, date: date)) {
             HStack {
                 Text(subjectName)
                 Spacer()
-                Text("詳細")
-                    .foregroundColor(.accentColor)
+                Text(status.rawValue)
+                    .foregroundColor(status.color)
             }
         }
     }
@@ -18,6 +19,6 @@ struct SubjectRowView: View {
 
 #Preview {
     List {
-        SubjectRowView(subjectName: "AWS演習", date: .now)
+        SubjectRowView(subjectName: "AWS演習", date: .now, status: .attendance)
     }
 }

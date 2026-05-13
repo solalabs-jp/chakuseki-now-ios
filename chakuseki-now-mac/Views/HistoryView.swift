@@ -6,15 +6,17 @@ struct HistoryView: View {
 
     var body: some View {
         NavigationStack {
-            VStack {
-                Text("履歴")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding()
+            ScrollView {
+                VStack {
+                    Text("履歴")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .padding()
 
-                CustomCalendarView(currentDate: $currentDate, selectedDate: $selectedDate)
-                
-                SelectedDateDisplayView(date: selectedDate)
+                    CustomCalendarView(currentDate: $currentDate, selectedDate: $selectedDate)
+                    
+                    SelectedDateDisplayView(date: selectedDate)
+                }
             }
         }
     }

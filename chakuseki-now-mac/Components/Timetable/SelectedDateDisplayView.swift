@@ -5,17 +5,27 @@ struct SelectedDateDisplayView: View {
     
     var body: some View {
         let displayDate = date ?? .now
-        VStack {
+        VStack(spacing: 16) {
             Text(displayDate.formatted(.dateTime.year().month().day().weekday(.wide).locale(CalendarStyle.locale)))
                 .font(.subheadline)
                 .foregroundColor(.secondary)
             
-            List {
-                SubjectRowView(subjectName: "AWS演習", date: displayDate)
-                SubjectRowView(subjectName: "テスト1", date: displayDate)
-                SubjectRowView(subjectName: "テスト2", date: displayDate)
-                SubjectRowView(subjectName: "テスト3", date: displayDate)
+            VStack(spacing: 0) {
+                SubjectRowView(subjectName: "AWS演習", date: displayDate, status: .attendance)
+                    .padding()
+                Divider()
+                SubjectRowView(subjectName: "テスト1", date: displayDate, status: .absence)
+                    .padding()
+                Divider()
+                SubjectRowView(subjectName: "テスト2", date: displayDate, status: .tardiness)
+                    .padding()
+                Divider()
+                SubjectRowView(subjectName: "テスト3", date: displayDate, status: .earlyDeparture)
+                    .padding()
             }
+            .background(Color.secondary.opacity(0.05))
+            .cornerRadius(12)
+            .padding(.horizontal)
         }
     }
 }

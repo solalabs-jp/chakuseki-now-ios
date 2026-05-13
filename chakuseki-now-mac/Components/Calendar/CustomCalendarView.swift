@@ -9,51 +9,76 @@ struct CustomCalendarView: View {
     private let weekDays = CalendarStyle.weekDays
 
     var body: some View {
-        VStack {
+        VStack(spacing: 20) {
             HStack {
-                Button(action: previousMonth) {
-                    Image(systemName: "chevron.left")
-                        .padding()
-                }
-
-                Spacer()
-
                 Text(CalendarStyle.monthYearString(for: currentDate))
-                    .font(.headline)
+                    .font(.title3)
+                    .fontWeight(.semibold)
 
                 Spacer()
+                
+                HStack(spacing: 0) {
+                    Button(action: previousMonth) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 14, weight: .semibold))
+                            .padding(10)
+                    }
 
-                Button(action: nextMonth) {
-                    Image(systemName: "chevron.right")
-                        .padding()
+                    Button(action: nextMonth) {
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 14, weight: .semibold))
+                            .padding(10)
+                    }
                 }
+                .background(Color.secondary.opacity(0.1))
+                .clipShape(RoundedRectangle(cornerRadius: 8))
             }
+            .padding(.horizontal)
 
-            HStack {
-                ForEach(weekDays, id: \.self) { day in
-                    Text(day)
-                        .frame(maxWidth: .infinity)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+            VStack(spacing: 8) {
+                HStack {
+                    ForEach(weekDays, id: \.self) { day in
+                        Text(day)
+                            .frame(maxWidth: .infinity)
+                            .font(.caption2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.secondary)
+                    }
                 }
-            }
 
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: daysInWeek)) {
-                ForEach(daysInMonth(), id: \.self) { date in
-                    if let date = date {
-                        DayCellView(date: date, isSelected: isSameDay(date1: date, date2: selectedDate))
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: daysInWeek), spacing: 0) {
+                    ForEach(daysInMonth(), id: \.self) { date in
+                        if let date = date {
+                            DayCellView(
+                                date: date,
+                                isSelected: isSameDay(date1: date, date2: selectedDate),
+                                hasEvent: shouldShowEvent(for: date)
+                            )
                             .onTapGesture {
                                 selectedDate = date
                             }
-                    } else {
-                        Text("")
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 8)
+                        } else {
+                            Color.clear
+                                .frame(height: 44)
+                        }
                     }
                 }
             }
         }
         .padding()
+        .background(Color.secondary.opacity(0.05))
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color.red, lineWidth: 1)
+        )
+        .padding()
+    }
+
+    private func shouldShowEvent(for date: Date) -> Bool {
+        // デモ用に、偶数の日に印を表示するようにします
+        let day = calendar.component(.day, from: date)
+        return day % 3 == 0
     }
 
     private func previousMonth() {
