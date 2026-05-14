@@ -9,11 +9,12 @@ struct HomeView: View {
         VStack(alignment: .leading) {
             
             HStack {
-                Text(submittedAnswer != nil ? "出席しました" : "おはようございます")
+                GreetingView(isAttended: submittedAnswer != nil)
                 Spacer() 
                 
             }
-            StatusView(status: currentStatus, targetName: "先生の信号")
+            StatusView(status: currentStatus, isAttended: submittedAnswer != nil)
+                .padding(.horizontal, -16)
 
             Spacer() 
 
@@ -39,12 +40,14 @@ struct HomeView: View {
                     VStack {
                         if let answer = submittedAnswer, let time = submittedTime {
                             AttendanceResultView(answer: answer, time: time)
+                                .padding(.horizontal, -16)
                         } else {
                             MessageInputField { sentText in
                                 print("送信されました: \(sentText)")
                                 submittedAnswer = sentText
                                 submittedTime = Date()
                             }
+                            .padding(.horizontal, -16)
                         }
                     }
                 }
