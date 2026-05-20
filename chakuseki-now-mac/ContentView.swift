@@ -16,29 +16,27 @@ struct ContentView: View {
     }
     
     var body: some View {
-        TabView(selection: selectedTabBinding){
-        
-        HomeView(resetTrigger: homeResetTrigger)
-            .tabItem {
-                Label("ホーム",systemImage: "house")
-            }
-            .tag(0)
-        
-        HistoryView()
-            .tabItem {
-                Label("履歴",systemImage: "clock")
-            }
-            .tag(1)
-            
-        GrowthView()
-            .tabItem{
-                Label("マイページ",systemImage: "chart.line.uptrend.xyaxis")
-            }
-            .tag(2)
-    }
-        
-    .padding(.horizontal)
-    .padding(.bottom)
+        TabView(selection: selectedTabBinding) {
+            HomeView(resetTrigger: homeResetTrigger)
+                .tabItem {
+                    Label("ホーム", systemImage: "house")
+                }
+                .tag(0)
+
+            HistoryView()
+                .tabItem {
+                    Label("時間割", systemImage: "calendar")
+                }
+                .tag(1)
+
+            GrowthView()
+                .tabItem{
+                    Label("マイページ", systemImage: "chart.line.uptrend.xyaxis")
+                }
+                .tag(2)
+        }
+        .padding(.horizontal)
+        .padding(.bottom)
     }
 }
 

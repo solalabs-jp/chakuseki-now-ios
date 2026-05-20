@@ -1,9 +1,24 @@
 import SwiftUI
 
 struct HistoryView: View {
+    @State private var currentDate: Date = .now
+    @State private var selectedDate: Date? = .now
+
     var body: some View {
-        VStack {
-            Text("履歴画面")
+        NavigationStack {
+            ScrollView {
+                VStack {
+                    Text("履歴を確認しよう")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+
+                    CustomCalendarView(currentDate: $currentDate, selectedDate: $selectedDate)
+                    
+                    SelectedDateDisplayView(date: selectedDate)
+                }
+            }
         }
     }
 }

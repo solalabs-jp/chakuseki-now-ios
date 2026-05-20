@@ -70,3 +70,7 @@ struct HomeView: View {
         submittedTime = nil
     }
 }
+
+#Preview {
+    HomeView(resetTrigger: 0)
+}
