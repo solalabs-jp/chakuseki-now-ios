@@ -3,6 +3,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var selectedTab = 0
     @State private var homeResetTrigger = 0
+    @State private var isLoggedIn = false
 
     private var selectedTabBinding: Binding<Int> {
         Binding {
@@ -17,8 +18,14 @@ struct ContentView: View {
     
     var body: some View {
         TabView(selection: selectedTabBinding){
-        
-        HomeView(resetTrigger: homeResetTrigger)
+
+        Group {
+            if isLoggedIn {
+                HomeView(resetTrigger: homeResetTrigger)
+            } else {
+                LoginPageView()
+            }
+        }
             .tabItem {
                 Label("ホーム",systemImage: "house")
             }
