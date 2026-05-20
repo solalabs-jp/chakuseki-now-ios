@@ -6,13 +6,16 @@ struct SubjectRowView: View {
     let status: AttendanceStatus
 
     var body: some View {
-        NavigationLink(destination: HistoryDetailView(subjectName: subjectName, date: date)) {
-            HStack {
-                Text(subjectName)
-                Spacer()
-                Text(status.rawValue)
-                    .foregroundColor(status.color)
-            }
+        HStack {
+            Text(subjectName)
+                .font(.body)
+            Spacer()
+            Text(status.rawValue)
+                .font(.body)
+                .foregroundColor(status.color)
+            Image(systemName: "chevron.right")
+                .font(.caption)
+                .foregroundColor(.secondary)
         }
     }
 }

@@ -21,12 +21,14 @@ struct CustomCalendarView: View {
                     Button(action: previousMonth) {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(CalendarStyle.controlColor)
                             .padding(10)
                     }
 
                     Button(action: nextMonth) {
                         Image(systemName: "chevron.right")
                             .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(CalendarStyle.controlColor)
                             .padding(10)
                     }
                 }

@@ -5,27 +5,18 @@ struct SelectedDateDisplayView: View {
     
     var body: some View {
         let displayDate = date ?? .now
-        VStack(spacing: 16) {
+        VStack(spacing: TimetableStyle.topPadding) {
             Text(displayDate.formatted(.dateTime.month().day().weekday(.abbreviated).locale(CalendarStyle.locale)))
-                .font(.headline)
+                .font(TimetableStyle.dateFont)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding([.top,.leading], 16)
+                .padding([.top, .leading], TimetableStyle.horizontalPadding)
             
-            VStack(spacing: 0) {
-                SubjectRowView(subjectName: "AWS演習", date: displayDate, status: .attendance)
-                    .padding()
-                Divider()
-                SubjectRowView(subjectName: "テスト1", date: displayDate, status: .absence)
-                    .padding()
-                Divider()
-                SubjectRowView(subjectName: "テスト2", date: displayDate, status: .tardiness)
-                    .padding()
-                Divider()
-                SubjectRowView(subjectName: "テスト3", date: displayDate, status: .earlyDeparture)
-                    .padding()
+            VStack(spacing: TimetableStyle.spacing) {
+                SubjectButtonView(subjectName: "AWS演習", date: displayDate, status: .attendance)
+                SubjectButtonView(subjectName: "テスト1", date: displayDate, status: .absence)
+                SubjectButtonView(subjectName: "テスト2", date: displayDate, status: .tardiness)
+                SubjectButtonView(subjectName: "テスト3", date: displayDate, status: .earlyDeparture)
             }
-            .background(Color.secondary.opacity(0.05))
-            .cornerRadius(12)
             .padding(.horizontal)
         }
     }
