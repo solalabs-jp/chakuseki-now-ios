@@ -21,34 +21,19 @@ struct HomeView: View {
             if currentStatus == .searching {
                 Spacer()
 
-                VStack(spacing: 15) {
-                    MainButton(title: "接続を開始する") {
-                        currentStatus = .connecting
-                    }
-
-                    Text("デバイスを机の上に置き、\nしばらくお待ちください。")
-                        .font(
-                            Font.custom("SF Pro", size: 16)
-                                .weight(.medium)
-                        )
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(AppColors.brownText)
-                        .frame(width: 244.12, height: 42, alignment: .center)
+                HomeSearchingContentView {
+                    currentStatus = .connecting
                 }
-                .frame(maxWidth: .infinity)
 
                 Spacer()
             } else {
-                Group {
-                    if let answer = submittedAnswer, let time = submittedTime {
-                        AttendanceResultView(answer: answer, time: time)
-                    } else {
-                        MessageInputField { sentText in
-                            print("送信されました: \(sentText)")
-                            submittedAnswer = sentText
-                            submittedTime = Date()
-                        }
-                    }
+                HomeAttendanceContentView(
+                    submittedAnswer: submittedAnswer,
+                    submittedTime: submittedTime
+                ) { sentText in
+                    print("送信されました: \(sentText)")
+                    submittedAnswer = sentText
+                    submittedTime = Date()
                 }
                 .padding(.top, 24)
                 .padding(.horizontal, -16)

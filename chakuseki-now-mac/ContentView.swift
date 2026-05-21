@@ -54,41 +54,6 @@ private struct MainTabView: View {
     }
 }
 
-private struct LoginView: View {
-    let onLogin: () -> Void
-
-    var body: some View {
-        VStack(spacing: 24) {
-            Spacer()
-
-            VStack(spacing: 8) {
-                Text("ログイン")
-                    .font(.system(size: 28, weight: .bold))
-                    .foregroundColor(AppColors.labelPrimary)
-
-                Text("仮ログイン画面")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(AppColors.labelSecondary)
-            }
-
-            Button(action: onLogin) {
-                Text("ホーム画面へ")
-                    .font(.system(size: 16, weight: .semibold))
-                    .frame(maxWidth: 220)
-                    .padding(.vertical, 12)
-                    .background(AppColors.brandRed)
-                    .foregroundColor(AppColors.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-            }
-            .buttonStyle(.plain)
-
-            Spacer()
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding()
-    }
-}
-
 #Preview {
     ContentView()
 }

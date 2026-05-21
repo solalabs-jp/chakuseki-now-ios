@@ -18,6 +18,11 @@ enum AppColors {
     static let softProfileBackground = Color(red: 0.99, green: 0.97, blue: 0.96)
     static let cardBorder = Color(red: 0.89, green: 0.75, blue: 0.72)
     static let messageInputBackground = Color(red: 1, green: 0.97, blue: 0.97)
+    static let loginCardBackground = Color(red: 1, green: 0.97, blue: 0.97)
+    static let loginCardBorder = Color(red: 1, green: 0.89, blue: 0.87)
+    static let loginCardShadow = Color.black.opacity(0.03)
+    static let loginTitle = Color(red: 0.69, green: 0.05, blue: 0.06)
+    static let forgotPasswordText = Color(red: 0, green: 0.46, blue: 0.67)
 
     static let attendanceBlue = Color(red: 0, green: 0.34, blue: 0.67)
     static let attendanceBlueBackground = attendanceBlue.opacity(0.15)
