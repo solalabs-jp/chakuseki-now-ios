@@ -27,12 +27,12 @@ struct StatusView: View {
                 }
                 .padding(0)
                 .frame(width: 40, height: 40, alignment: .center)
-                .background(Color(red: 0, green: 0.34, blue: 0.67).opacity(0.15))
+                .background(AppColors.attendanceBlueBackground)
                 .cornerRadius(9999)
                 .overlay(
                     RoundedRectangle(cornerRadius: 9999)
                         .inset(by: 0.5)
-                        .stroke(Color(red: 0.66, green: 0.78, blue: 1), lineWidth: 1)
+                        .stroke(AppColors.attendanceBlueBorder, lineWidth: 1)
                 )
             } else {
                 // 1ページ目 (検索中) と 3ページ目 (出席完了)
@@ -51,14 +51,14 @@ struct StatusView: View {
                 }
                 .padding(0)
                 .frame(width: 40, height: 40, alignment: .center)
-                .background(Color(red: 0.69, green: 0.05, blue: 0.06).opacity(0.1))
+                .background(AppColors.warningRedBackground)
                 .cornerRadius(9999)
             }
 
             // Space Between
             Text(status == .searching ? "先生の信号を検索しています..." : "先生の信号と接続中...")
                 .font(.system(size: 17, weight: .bold))
-                .foregroundColor(Color.primary)
+                .foregroundColor(AppColors.labelPrimary)
                 .frame(height: 40, alignment: .top)
             
             Spacer()
@@ -76,17 +76,17 @@ struct StatusView: View {
                             Font.custom("SF Pro", size: 12)
                                 .weight(.medium)
                         )
-                        .foregroundColor(Color(red: 0, green: 0.34, blue: 0.67))
+                        .foregroundColor(AppColors.attendanceBlue)
                         .frame(width: 61.41, height: 16, alignment: .leading)
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 4)
-                .background(Color(red: 0, green: 0.34, blue: 0.67).opacity(0.15))
+                .background(AppColors.attendanceBlueBackground)
                 .cornerRadius(9999)
                 .overlay(
                     RoundedRectangle(cornerRadius: 9999)
                         .inset(by: 0.5)
-                        .stroke(Color(red: 0.66, green: 0.78, blue: 1), lineWidth: 1)
+                        .stroke(AppColors.attendanceBlueBorder, lineWidth: 1)
                 )
             } else {
                 // 3ページ目 (出席完了)
@@ -96,30 +96,30 @@ struct StatusView: View {
                             Font.custom("SF Pro", size: 12)
                                 .weight(.medium)
                         )
-                        .foregroundColor(Color(red: 0.09, green: 0.4, blue: 0.2))
+                        .foregroundColor(AppColors.successGreenText)
                         .frame(width: 61.41, height: 16, alignment: .leading)
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 4)
-                .background(Color(red: 0.86, green: 0.99, blue: 0.91))
+                .background(AppColors.successGreenBackground)
                 .cornerRadius(9999)
                 .overlay(
                     RoundedRectangle(cornerRadius: 9999)
                         .inset(by: 0.5)
-                        .stroke(Color(red: 0.73, green: 0.97, blue: 0.82), lineWidth: 1)
+                        .stroke(AppColors.successGreenBorder, lineWidth: 1)
                 )
             }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 24)
         .frame(maxWidth: .infinity, alignment: .center)
-        .background(.white)
+        .background(AppColors.white)
         .cornerRadius(24)
-        .shadow(color: .black.opacity(0.02), radius: 5, x: 0, y: 2)
+        .shadow(color: AppColors.shadow, radius: 5, x: 0, y: 2)
         .overlay(
             RoundedRectangle(cornerRadius: 24)
                 .inset(by: 0.5)
-                .stroke(Color(red: 0.89, green: 0.75, blue: 0.72), lineWidth: 1)
+                .stroke(AppColors.cardBorder, lineWidth: 1)
         )
     }
 }
@@ -131,5 +131,5 @@ struct StatusView: View {
         StatusView(status: .connecting)
     }
     .padding()
-    .background(Color(white: 0.95))
+    .background(AppColors.placeholderBackground)
 }

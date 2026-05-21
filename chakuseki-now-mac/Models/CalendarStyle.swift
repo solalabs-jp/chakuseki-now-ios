@@ -3,10 +3,10 @@ import SwiftUI
 enum CalendarStyle {
     static let locale = Locale(identifier: "ja_JP")
     static let weekDays = ["日", "月", "火", "水", "木", "金", "土"]
-    static let selectionColor = Color.blue
-    static let controlColor = Color.red
+    static let selectionColor = AppColors.calendarSelection
+    static let controlColor = AppColors.calendarControl
     static let markerSize: CGFloat = 4
-    static let markerColor = Color.gray.opacity(0.5)
+    static let markerColor = AppColors.calendarMarker
     
     static var calendar: Calendar {
         var cal = Calendar.current

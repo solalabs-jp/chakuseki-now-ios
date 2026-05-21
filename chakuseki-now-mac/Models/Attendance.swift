@@ -13,12 +13,12 @@ enum AttendanceStatus: String, CaseIterable, Identifiable {
     
     var color: Color {
         switch self {
-        case .attendance: return .green
-        case .absence: return .red
-        case .officialAbsence: return .blue
-        case .bereavement: return .gray
-        case .earlyDeparture: return .orange
-        case .tardiness: return .yellow
+        case .attendance: return AppColors.statusAttendance
+        case .absence: return AppColors.statusAbsence
+        case .officialAbsence: return AppColors.statusOfficialAbsence
+        case .bereavement: return AppColors.statusBereavement
+        case .earlyDeparture: return AppColors.statusEarlyDeparture
+        case .tardiness: return AppColors.statusTardiness
         }
     }
 }

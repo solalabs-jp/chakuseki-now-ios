@@ -2,7 +2,7 @@ import SwiftUI
 
 enum TimetableStyle {
     // ボタンのスタイル
-    static let rowBackground = Color.secondary.opacity(0.05)
+    static let rowBackground = AppColors.timetableRowBackground
     static let cornerRadius: CGFloat = 12
     static let spacing: CGFloat = 12
     

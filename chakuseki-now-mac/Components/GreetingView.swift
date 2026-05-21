@@ -7,7 +7,7 @@ struct GreetingView: View {
         Text(isAttended ? "出席しました" : "おはようございます")
             .font(.system(size: 24, weight: .bold))
             .kerning(0.4)
-            .foregroundColor(Constants.LabelsVibrantPrimary)
+            .foregroundColor(AppColors.labelPrimary)
             .frame(width: 241,height: 41, alignment: .topLeading)
     }
 }

@@ -32,7 +32,7 @@ struct HomeView: View {
                                 .weight(.medium)
                         )
                         .multilineTextAlignment(.center)
-                        .foregroundColor(Color(red: 0.36, green: 0.25, blue: 0.24))
+                        .foregroundColor(AppColors.brownText)
                         .frame(width: 244.12, height: 42, alignment: .center)
                 }
                 .frame(maxWidth: .infinity)
