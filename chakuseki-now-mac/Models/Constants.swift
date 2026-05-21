@@ -41,7 +41,7 @@ enum AppColors {
     static let profileBadge = Color.red
     static let profileOverlay = Color.black.opacity(0.7)
 
-    static let statusAttendance = Color.green
+    static let statusAttendance = Color(red: 0x13 / 255.0, green: 0x5D / 255.0, blue: 0xB2 / 255.0)
     static let statusAbsence = Color.red
     static let statusOfficialAbsence = Color.blue
     static let statusBereavement = Color.gray
