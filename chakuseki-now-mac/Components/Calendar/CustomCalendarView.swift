@@ -54,7 +54,7 @@ struct CustomCalendarView: View {
                             DayCellView(
                                 date: date,
                                 isSelected: isSameDay(date1: date, date2: selectedDate),
-                                hasEvent: shouldShowEvent(for: date)
+                                statuses: statuses(for: date)
                             )
                             .onTapGesture {
                                 selectedDate = date
@@ -77,10 +77,17 @@ struct CustomCalendarView: View {
         .padding()
     }
 
-    private func shouldShowEvent(for date: Date) -> Bool {
-        // デモ用に、偶数の日に印を表示するようにします
+    private func statuses(for date: Date) -> [AttendanceStatus] {
+        // デモ用に、日付に応じて授業のステータスを返します
         let day = calendar.component(.day, from: date)
-        return day % 3 == 0
+        if day % 3 == 0 {
+            return [.attendance, .absence, .tardiness, .earlyDeparture]
+        } else if day % 2 == 0 {
+            return [.attendance, .attendance]
+        } else if day % 5 == 0 {
+            return [.officialAbsence]
+        }
+        return []
     }
 
     private func previousMonth() {

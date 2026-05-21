@@ -3,7 +3,7 @@ import SwiftUI
 struct DayCellView: View {
     let date: Date
     let isSelected: Bool
-    var hasEvent: Bool = false
+    var statuses: [AttendanceStatus] = []
 
     var body: some View {
         VStack(spacing: 4) {
@@ -14,10 +14,14 @@ struct DayCellView: View {
                 .background(isSelected ? CalendarStyle.selectionColor : AppColors.clear)
                 .clipShape(Circle())
             
-            if hasEvent {
-                Circle()
-                    .fill(CalendarStyle.markerColor)
-                    .frame(width: CalendarStyle.markerSize, height: CalendarStyle.markerSize)
+            if !statuses.isEmpty {
+                HStack(spacing: 2) {
+                    ForEach(0..<statuses.count, id: \.self) { index in
+                        Circle()
+                            .fill(statuses[index].color)
+                            .frame(width: CalendarStyle.markerSize, height: CalendarStyle.markerSize)
+                    }
+                }
             } else {
                 Spacer()
                     .frame(height: CalendarStyle.markerSize)
