@@ -14,7 +14,7 @@ struct GrowthView: View {
                 Text("マイページ")
                     .font(.system(size: 24, weight: .bold))
                     .kerning(0.4)
-                    .foregroundColor(Constants.LabelsVibrantPrimary)
+                    .foregroundColor(AppColors.labelPrimary)
                     .frame(width: 241, height: 41, alignment: .topLeading)
 
                 Spacer()
@@ -32,18 +32,18 @@ struct GrowthView: View {
                                 VStack(spacing: 12) {
                                     Image(systemName: "photo.badge.plus")
                                         .font(.system(size: 34, weight: .medium))
-                                        .foregroundColor(Color(red: 0.72, green: 0.48, blue: 0.44))
+                                        .foregroundColor(AppColors.profileIcon)
 
                                     Text("画像を選択")
                                         .font(.system(size: 16, weight: .semibold))
-                                        .foregroundColor(Constants.LabelsVibrantPrimary)
+                                        .foregroundColor(AppColors.labelPrimary)
 
                                     Text("クリックしてアップロード")
                                         .font(.system(size: 13))
-                                        .foregroundColor(.secondary)
+                                        .foregroundColor(AppColors.labelSecondary)
                                 }
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .background(Color(red: 0.99, green: 0.97, blue: 0.96))
+                                .background(AppColors.softProfileBackground)
                             }
                         }
                         .frame(width: 192, height: 192)
@@ -52,8 +52,8 @@ struct GrowthView: View {
                             RoundedRectangle(cornerRadius: 20, style: .continuous)
                                 .stroke(
                                     selectedProfileImage == nil
-                                    ? Color(red: 0.89, green: 0.75, blue: 0.72)
-                                    : Color.clear,
+                                    ? AppColors.cardBorder
+                                    : AppColors.clear,
                                     style: StrokeStyle(lineWidth: 1.5, dash: [7, 5])
                                 )
                         )
@@ -61,10 +61,10 @@ struct GrowthView: View {
                         if selectedProfileImage != nil {
                             Text("変更")
                                 .font(.system(size: 12, weight: .semibold))
-                                .foregroundColor(.white)
+                                .foregroundColor(AppColors.white)
                                 .padding(.horizontal, 10)
                                 .padding(.vertical, 6)
-                                .background(Color.black.opacity(0.7))
+                                .background(AppColors.profileOverlay)
                                 .clipShape(Capsule())
                                 .padding(12)
                         }
@@ -75,24 +75,24 @@ struct GrowthView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
 
                 Circle()
-                    .fill(Color.red)
+                    .fill(AppColors.profileBadge)
                     .frame(width: 20, height: 20)
                     .overlay(
                         Image(systemName: "star.fill")
                             .font(.system(size: 10, weight: .bold))
-                            .foregroundColor(.white)
+                            .foregroundColor(AppColors.white)
                     )
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                     .padding(.top, 241)
                     .padding(.leading, 111)
             }
             .frame(maxWidth: .infinity, minHeight: 358, maxHeight: 358)
-            .background(.white)
+            .background(AppColors.white)
             .cornerRadius(12)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
                     .inset(by: 0.5)
-                    .stroke(Color(red: 0.89, green: 0.75, blue: 0.72).opacity(0.3), lineWidth: 1)
+                    .stroke(AppColors.cardBorder.opacity(0.3), lineWidth: 1)
             )
             .padding(.top, 61)
             .padding(.horizontal, -16)

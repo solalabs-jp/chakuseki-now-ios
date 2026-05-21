@@ -18,7 +18,7 @@ struct AttendanceResultView: View {
 
                 Text("打刻時間:")
                     .font(.system(size: 15))
-                    .foregroundColor(Color(red: 0.36, green: 0.25, blue: 0.24))
+                    .foregroundColor(AppColors.brownText)
 
                 Spacer()
 
@@ -27,7 +27,7 @@ struct AttendanceResultView: View {
                         Font.custom("Lexend", size: 17)
                             .weight(.semibold)
                     )
-                    .foregroundColor(Color(red: 0.15, green: 0.09, blue: 0.08))
+                    .foregroundColor(AppColors.darkBrownText)
                     .frame(width: 78.27, height: 22, alignment: .leading)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -43,7 +43,7 @@ struct AttendanceResultView: View {
 
                     Text("送信した回答:")
                         .font(.system(size: 15))
-                        .foregroundColor(Color(red: 0.36, green: 0.25, blue: 0.24))
+                        .foregroundColor(AppColors.brownText)
                 }
 
                 VStack(alignment: .leading, spacing: 0) {
@@ -51,24 +51,24 @@ struct AttendanceResultView: View {
                 }
                 .padding(16)
                 .frame(maxWidth: .infinity, minHeight: 144, maxHeight: 144, alignment: .topLeading)
-                .background(Color(red: 0, green: 0.34, blue: 0.67).opacity(0.15))
+                .background(AppColors.attendanceBlueBackground)
                 .cornerRadius(12)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
                         .inset(by: 0.5)
-                        .stroke(Color(red: 0.66, green: 0.78, blue: 1), lineWidth: 1)
+                        .stroke(AppColors.attendanceBlueBorder, lineWidth: 1)
                 )
             }
         }
         .padding(16)
         .frame(maxWidth: .infinity, minHeight: 290, maxHeight: 290, alignment: .topLeading)
-        .background(.white)
+        .background(AppColors.white)
         .cornerRadius(24)
-        .shadow(color: .black.opacity(0.02), radius: 4, x: 0, y: 2)
+        .shadow(color: AppColors.shadow, radius: 4, x: 0, y: 2)
         .overlay(
             RoundedRectangle(cornerRadius: 24)
                 .inset(by: 0.5)
-                .stroke(Color(red: 0.66, green: 0.78, blue: 1), lineWidth: 1)
+                .stroke(AppColors.attendanceBlueBorder, lineWidth: 1)
         )
     }
 
@@ -79,17 +79,17 @@ struct AttendanceResultView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 15, height: 15)
-                .foregroundStyle(Color(red: 0, green: 0.34, blue: 0.67))
+                .foregroundStyle(AppColors.attendanceBlue)
         }
         .padding(0)
         .frame(width: 32, height: 32, alignment: .center)
-        .background(Color(red: 0, green: 0.34, blue: 0.67).opacity(0.15))
+        .background(AppColors.attendanceBlueBackground)
         .cornerRadius(9999)
     }
 
     private var resultDivider: some View {
         Rectangle()
-            .fill(Color(red: 0.66, green: 0.78, blue: 1))
+            .fill(AppColors.attendanceBlueBorder)
             .frame(height: 1)
             .frame(maxWidth: .infinity)
     }

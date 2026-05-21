@@ -12,7 +12,7 @@ struct MainButton: View {
             ZStack {
                 // 波紋アニメーション1
                 Circle()
-                    .stroke(Color(red: 211/255, green: 45/255, blue: 38/255), lineWidth: 1)
+                    .stroke(AppColors.brandRed, lineWidth: 1)
                     .frame(width: isAnimating ? 192 : 80, height: isAnimating ? 192 : 80)
                     .opacity(isAnimating ? 0 : 1)
                     .animation(
@@ -22,7 +22,7 @@ struct MainButton: View {
 
                 // 波紋アニメーション2（1秒遅れ）
                 Circle()
-                    .stroke(Color(red: 211/255, green: 45/255, blue: 38/255), lineWidth: 1)
+                    .stroke(AppColors.brandRed, lineWidth: 1)
                     .frame(width: isAnimating ? 192 : 80, height: isAnimating ? 192 : 80)
                     .opacity(isAnimating ? 0 : 1)
                     .animation(
@@ -32,10 +32,10 @@ struct MainButton: View {
                 
                 // 内側の赤い円（塗りつぶし）
                 Circle()
-                    .fill(Color(red: 211/255, green: 45/255, blue: 38/255))
+                    .fill(AppColors.brandRed)
                     .frame(width: 80, height: 80)
                     // 浮き出ているような影を追加
-                    .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
+                    .shadow(color: AppColors.strongShadow, radius: 10, x: 0, y: 5)
                 
                 // 真ん中のアイコン
                 Image("Icon")

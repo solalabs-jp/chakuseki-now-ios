@@ -15,7 +15,7 @@ struct SubjectRowView: View {
                 .foregroundColor(status.color)
             Image(systemName: "chevron.right")
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundColor(AppColors.labelSecondary)
         }
     }
 }

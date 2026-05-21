@@ -32,7 +32,7 @@ struct CustomCalendarView: View {
                             .padding(10)
                     }
                 }
-                .background(Color.secondary.opacity(0.1))
+                .background(AppColors.calendarHeaderBackground)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
             }
             .padding(.horizontal)
@@ -44,7 +44,7 @@ struct CustomCalendarView: View {
                             .frame(maxWidth: .infinity)
                             .font(.caption2)
                             .fontWeight(.bold)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(AppColors.labelSecondary)
                     }
                 }
 
@@ -60,7 +60,7 @@ struct CustomCalendarView: View {
                                 selectedDate = date
                             }
                         } else {
-                            Color.clear
+                            AppColors.clear
                                 .frame(height: 44)
                         }
                     }
@@ -68,11 +68,11 @@ struct CustomCalendarView: View {
             }
         }
         .padding()
-        .background(Color.secondary.opacity(0.05))
+        .background(AppColors.calendarBackground)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.red, lineWidth: 1)
+                .stroke(AppColors.calendarDebugBorder, lineWidth: 1)
         )
         .padding()
     }

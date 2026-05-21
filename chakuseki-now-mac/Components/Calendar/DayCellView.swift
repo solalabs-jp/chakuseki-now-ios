@@ -9,9 +9,9 @@ struct DayCellView: View {
         VStack(spacing: 4) {
             Text("\(CalendarStyle.calendar.component(.day, from: date))")
                 .font(.body)
-                .foregroundColor(isSelected ? .white : .primary)
+                .foregroundColor(isSelected ? AppColors.white : AppColors.labelPrimary)
                 .frame(width: 32, height: 32)
-                .background(isSelected ? CalendarStyle.selectionColor : Color.clear)
+                .background(isSelected ? CalendarStyle.selectionColor : AppColors.clear)
                 .clipShape(Circle())
             
             if hasEvent {

@@ -24,12 +24,12 @@ struct MessageInputField: View {
                     
                     Text("回答して出席")
                         .fontWeight(.bold)
-                        .foregroundColor(.white)
+                        .foregroundColor(AppColors.white)
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
                 .frame(maxWidth: .infinity, alignment: .center)
-                .background(inputText.isEmpty ? Color.gray : Color(red: 0.83, green: 0.18, blue: 0.15))
+                .background(inputText.isEmpty ? AppColors.brandRedDisabled : AppColors.brandRedDeep)
                 .cornerRadius(12)
             }
             .buttonStyle(.plain)
@@ -37,13 +37,13 @@ struct MessageInputField: View {
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .topLeading)
-        .background(.white)
+        .background(AppColors.white)
         .cornerRadius(24)
-        .shadow(color: .black.opacity(0.02), radius: 5, x: 0, y: 2)
+        .shadow(color: AppColors.shadow, radius: 5, x: 0, y: 2)
         .overlay(
             RoundedRectangle(cornerRadius: 24)
                 .inset(by: 0.5)
-                .stroke(Color(red: 0.89, green: 0.75, blue: 0.72), lineWidth: 1)
+                .stroke(AppColors.cardBorder, lineWidth: 1)
         )
     }
 
@@ -57,12 +57,12 @@ struct MessageInputField: View {
             .padding(.top, 12)
             .padding(.bottom, 166)
             .frame(maxWidth: .infinity, alignment: .topLeading)
-            .background(Color(red: 1, green: 0.97, blue: 0.97))
+            .background(AppColors.messageInputBackground)
             .cornerRadius(12)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
                     .inset(by: 0.5)
-                    .stroke(Color(red: 0.89, green: 0.75, blue: 0.72), lineWidth: 1)
+                    .stroke(AppColors.cardBorder, lineWidth: 1)
             )
             .overlay(alignment: .topLeading) {
                 ZStack(alignment: .topLeading) {
@@ -70,7 +70,7 @@ struct MessageInputField: View {
                         .font(.body)
                         .focused($isInputFocused)
                         .scrollContentBackground(.hidden)
-                        .background(Color.clear)
+                        .background(AppColors.clear)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .onChange(of: inputText) { _, newValue in
                             let limitedText = limitedText(newValue)
@@ -83,7 +83,7 @@ struct MessageInputField: View {
                     if inputText.isEmpty {
                         Text("一限のお題を入力...")
                             .font(.body)
-                            .foregroundColor(.secondary.opacity(0.35))
+                            .foregroundColor(AppColors.placeholderText)
                             .padding(.horizontal, 5)
                             .padding(.vertical, 8)
                             .allowsHitTesting(false)
