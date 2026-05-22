@@ -123,10 +123,10 @@ struct HistoryDetailView: View {
                                 .padding(.horizontal, 12)
                                 .padding(.vertical, 6)
                                 .foregroundColor(record.status.color)
-                                .background(Color.white.opacity(0.8))
+                                .background(record.status.pillBackgroundColor)
                                 .clipShape(Capsule())
                                 .overlay(
-                                    Capsule().stroke(record.status.color.opacity(0.5), lineWidth: 1)
+                                    Capsule().stroke(record.status.pillBorderColor, lineWidth: 1)
                                 )
                             }
                             .padding()
@@ -179,8 +179,34 @@ extension AttendanceStatus {
     
     var rowBackgroundColor: Color {
         switch self {
-        case .attendance: return .clear
-        default: return self.color.opacity(0.1)
+        case .attendance: return AppColors.rowAttendanceBackground
+        case .absence: return AppColors.rowAbsenceBackground
+        case .officialAbsence: return AppColors.rowOfficialAbsenceBackground
+        case .bereavement: return AppColors.rowBereavementBackground
+        case .earlyDeparture: return AppColors.rowEarlyDepartureBackground
+        case .tardiness: return AppColors.rowTardinessBackground
+        }
+    }
+    
+    var pillBackgroundColor: Color {
+        switch self {
+        case .attendance: return AppColors.pillAttendanceBackground
+        case .absence: return AppColors.pillAbsenceBackground
+        case .officialAbsence: return AppColors.pillOfficialAbsenceBackground
+        case .bereavement: return AppColors.pillBereavementBackground
+        case .earlyDeparture: return AppColors.pillEarlyDepartureBackground
+        case .tardiness: return AppColors.pillTardinessBackground
+        }
+    }
+    
+    var pillBorderColor: Color {
+        switch self {
+        case .attendance: return AppColors.pillAttendanceBorder
+        case .absence: return AppColors.pillAbsenceBorder
+        case .officialAbsence: return AppColors.pillOfficialAbsenceBorder
+        case .bereavement: return AppColors.pillBereavementBorder
+        case .earlyDeparture: return AppColors.pillEarlyDepartureBorder
+        case .tardiness: return AppColors.pillTardinessBorder
         }
     }
 }

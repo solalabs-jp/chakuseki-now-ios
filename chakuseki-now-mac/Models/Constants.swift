@@ -42,11 +42,40 @@ enum AppColors {
     static let profileOverlay = Color.black.opacity(0.7)
 
     static let statusAttendance = Color(red: 0x13 / 255.0, green: 0x5D / 255.0, blue: 0xB2 / 255.0)
-    static let statusAbsence = Color.red
-    static let statusOfficialAbsence = Color.blue
+    static let statusAbsence = Color(red: 0xBA / 255.0, green: 0x1A / 255.0, blue: 0x1A / 255.0) // BA1A1A (badge text/icon)
+    static let statusOfficialAbsence = Color(red: 6 / 255.0, green: 182 / 255.0, blue: 212 / 255.0)
+    static let officialAbsenceOpacity = 0.30
+    static let officialAbsenceBackground = Color(red: 207 / 255.0, green: 250 / 255.0, blue: 254 / 255.0).opacity(officialAbsenceOpacity)
+    static let officialAbsenceBorder = Color(red: 165 / 255.0, green: 243 / 255.0, blue: 252 / 255.0)
     static let statusBereavement = Color.gray
     static let statusEarlyDeparture = Color.orange
     static let statusTardiness = Color.yellow
+
+    // MARK: - Detail Page List Colors
+    // Row backgrounds
+    static let rowAttendanceBackground = Color.clear
+    static let absenceBackgroundOpacity = 0.10
+    static let rowAbsenceBackground = Color(red: 0xFF / 255.0, green: 0xDA / 255.0, blue: 0xD6 / 255.0).opacity(absenceBackgroundOpacity) // FFDAD6 (background)
+    static let rowOfficialAbsenceBackground = officialAbsenceBackground
+    static let rowBereavementBackground = Color.clear
+    static let rowEarlyDepartureBackground = Color.clear
+    static let rowTardinessBackground = Color.clear
+    
+    // Pill backgrounds
+    static let pillAttendanceBackground = statusAttendance.opacity(0.12)
+    static let pillAbsenceBackground = Color(red: 0xFF / 255.0, green: 0xDA / 255.0, blue: 0xD6 / 255.0).opacity(absenceBackgroundOpacity)
+    static let pillOfficialAbsenceBackground = officialAbsenceBorder
+    static let pillBereavementBackground = statusBereavement.opacity(0.12)
+    static let pillEarlyDepartureBackground = statusEarlyDeparture.opacity(0.12)
+    static let pillTardinessBackground = statusTardiness.opacity(0.12)
+    
+    // Pill borders
+    static let pillAttendanceBorder = statusAttendance.opacity(0.25)
+    static let pillAbsenceBorder = Color(red: 0xE4 / 255.0, green: 0xBE / 255.0, blue: 0xB8 / 255.0) // E4BEB8 (outline)
+    static let pillOfficialAbsenceBorder = statusOfficialAbsence
+    static let pillBereavementBorder = statusBereavement.opacity(0.25)
+    static let pillEarlyDepartureBorder = statusEarlyDeparture.opacity(0.25)
+    static let pillTardinessBorder = statusTardiness.opacity(0.25)
 }
 
 struct Constants {
