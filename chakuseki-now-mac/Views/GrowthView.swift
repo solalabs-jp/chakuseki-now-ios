@@ -7,6 +7,7 @@ struct GrowthView: View {
     @State private var selectedProfileImage: UIImage? = GrowthView.loadSavedProfileImage()
 
     private static let imageStorageKey = "growthView.profileImageData"
+    private let levelProgress: CGFloat = 0.42
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -21,70 +22,8 @@ struct GrowthView: View {
             }
 
             ZStack(alignment: .top) {
-                Button(action: { isPhotoPickerPresented = true }) {
-                    ZStack(alignment: .bottomTrailing) {
-                        Group {
-                            if let selectedProfileImage {
-                                Image(uiImage: selectedProfileImage)
-                                    .resizable()
-                                    .scaledToFill()
-                            } else {
-                                VStack(spacing: 12) {
-                                    Image(systemName: "photo.badge.plus")
-                                        .font(.system(size: 34, weight: .medium))
-                                        .foregroundColor(AppColors.profileIcon)
-
-                                    Text("画像を選択")
-                                        .font(.system(size: 16, weight: .semibold))
-                                        .foregroundColor(AppColors.labelPrimary)
-
-                                    Text("クリックしてアップロード")
-                                        .font(.system(size: 13))
-                                        .foregroundColor(AppColors.labelSecondary)
-                                }
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .background(AppColors.softProfileBackground)
-                            }
-                        }
-                        .frame(width: 192, height: 192)
-                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                .stroke(
-                                    selectedProfileImage == nil
-                                    ? AppColors.cardBorder
-                                    : AppColors.clear,
-                                    style: StrokeStyle(lineWidth: 1.5, dash: [7, 5])
-                                )
-                        )
-
-                        if selectedProfileImage != nil {
-                            Text("変更")
-                                .font(.system(size: 12, weight: .semibold))
-                                .foregroundColor(AppColors.white)
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 6)
-                                .background(AppColors.profileOverlay)
-                                .clipShape(Capsule())
-                                .padding(12)
-                        }
-                    }
-                }
-                .buttonStyle(.plain)
-                .padding(.top, 33)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-
-                Circle()
-                    .fill(AppColors.profileBadge)
-                    .frame(width: 20, height: 20)
-                    .overlay(
-                        Image(systemName: "star.fill")
-                            .font(.system(size: 10, weight: .bold))
-                            .foregroundColor(AppColors.white)
-                    )
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                    .padding(.top, 241)
-                    .padding(.leading, 111)
+                profileImageButton
+                levelSection
             }
             .frame(maxWidth: .infinity, minHeight: 358, maxHeight: 358)
             .background(AppColors.white)
@@ -116,6 +55,116 @@ struct GrowthView: View {
         .padding(.top, 1.5)
         .padding(.horizontal)
         .padding(.bottom)
+    }
+
+    private var profileImageButton: some View {
+        Button(action: { isPhotoPickerPresented = true }) {
+            ZStack(alignment: .bottomTrailing) {
+                profileImageContent
+                    .frame(width: 192, height: 192)
+                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .overlay(profileImageBorder)
+
+                if selectedProfileImage != nil {
+                    Text("変更")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundColor(AppColors.white)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(AppColors.profileOverlay)
+                        .clipShape(Capsule())
+                        .padding(12)
+                }
+            }
+        }
+        .buttonStyle(.plain)
+        .padding(.top, 33)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+    }
+
+    @ViewBuilder
+    private var profileImageContent: some View {
+        if let selectedProfileImage {
+            Image(uiImage: selectedProfileImage)
+                .resizable()
+                .scaledToFill()
+        } else {
+            VStack(spacing: 12) {
+                Image(systemName: "photo.badge.plus")
+                    .font(.system(size: 34, weight: .medium))
+                    .foregroundColor(AppColors.profileIcon)
+
+                Text("画像を選択")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(AppColors.labelPrimary)
+
+                Text("クリックしてアップロード")
+                    .font(.system(size: 13))
+                    .foregroundColor(AppColors.labelSecondary)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(AppColors.softProfileBackground)
+        }
+    }
+
+    private var profileImageBorder: some View {
+        RoundedRectangle(cornerRadius: 20, style: .continuous)
+            .stroke(
+                selectedProfileImage == nil ? AppColors.cardBorder : AppColors.clear,
+                style: StrokeStyle(lineWidth: 1.5, dash: [7, 5])
+            )
+    }
+
+    private var levelSection: some View {
+        VStack(spacing: 14) {
+            HStack(spacing: 9) {
+                Circle()
+                    .fill(AppColors.profileBadge)
+                    .frame(width: 20, height: 20)
+                    .overlay(
+                        Image(systemName: "star.fill")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundColor(AppColors.white)
+                    )
+
+                Text("レベル〇〇")
+                    .font(.system(size: 17))
+                    .foregroundColor(AppColors.black)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.leading, 111)
+
+            VStack(alignment: .leading, spacing: 0) {
+                Text("EXP")
+                    .font(.system(size: 12))
+                    .foregroundColor(AppColors.black)
+
+                VStack(spacing: 12) {
+                    GeometryReader { geometry in
+                        VStack(alignment: .leading, spacing: 0) {
+                            RoundedRectangle(cornerRadius: 9999)
+                                .fill(Color(red: 0.07, green: 0.36, blue: 0.7))
+                                .frame(width: geometry.size.width * levelProgress, height: 12)
+                        }
+                        .padding(0)
+                        .frame(maxWidth: .infinity, maxHeight: 12, alignment: .leading)
+                        .background(Color(red: 0.98, green: 0.86, blue: 0.85))
+                        .cornerRadius(9999)
+                    }
+                    .frame(height: 12)
+
+                    Text("進化まであと〇〇○EXP!")
+                        .font(.system(size: 12))
+                        .foregroundColor(AppColors.black)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                }
+                .padding(.top, 8)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 17)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .padding(.top, 241)
     }
 
     @MainActor
