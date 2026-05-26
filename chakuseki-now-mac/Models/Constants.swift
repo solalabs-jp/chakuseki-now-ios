@@ -34,7 +34,9 @@ enum AppColors {
     static let calendarBackground = Color.secondary.opacity(0.05)
     static let calendarDebugBorder = Color.red
 
-    static let timetableRowBackground = Color.secondary.opacity(0.05)
+    static let timetableRowBackground = AppColors.white
+    static let timetableRowOutline = Color(red: 0xE4 / 255.0, green: 0xBE / 255.0, blue: 0xB8 / 255.0).opacity(0.20)
+    static let timetableRowTime = Color(red: 0x90 / 255.0, green: 0x6F / 255.0, blue: 0x6B / 255.0)
     static let placeholderBackground = Color(white: 0.95)
     static let placeholderText = Color.secondary.opacity(0.35)
 
@@ -48,8 +50,8 @@ enum AppColors {
     static let officialAbsenceBackground = Color(red: 207 / 255.0, green: 250 / 255.0, blue: 254 / 255.0).opacity(officialAbsenceOpacity)
     static let officialAbsenceBorder = Color(red: 165 / 255.0, green: 243 / 255.0, blue: 252 / 255.0)
     static let statusBereavement = Color.gray
-    static let statusEarlyDeparture = Color.orange
-    static let statusTardiness = Color.yellow
+    static let statusEarlyDeparture = Color(red: 0x84 / 255.0, green: 0xCC / 255.0, blue: 0x16 / 255.0)
+    static let statusTardiness = Color(red: 0xF5 / 255.0, green: 0x9E / 255.0, blue: 0x0B / 255.0)
 
     // MARK: - Detail Page List Colors
     // Row backgrounds
@@ -58,7 +60,7 @@ enum AppColors {
     static let rowAbsenceBackground = Color(red: 0xFF / 255.0, green: 0xDA / 255.0, blue: 0xD6 / 255.0).opacity(absenceBackgroundOpacity) // FFDAD6 (background)
     static let rowOfficialAbsenceBackground = officialAbsenceBackground
     static let rowBereavementBackground = Color.clear
-    static let rowEarlyDepartureBackground = Color.clear
+    static let rowEarlyDepartureBackground = Color(red: 0xEC / 255.0, green: 0xFC / 255.0, blue: 0xCB / 255.0).opacity(0.30)
     static let rowTardinessBackground = Color.clear
     
     // Pill backgrounds

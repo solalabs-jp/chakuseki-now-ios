@@ -3,12 +3,19 @@ import SwiftUI
 struct SubjectRowView: View {
     let subjectName: String
     let date: Date
+    let timeString: String
     let status: AttendanceStatus
 
     var body: some View {
         HStack {
-            Text(subjectName)
-                .font(.body)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(subjectName)
+                    .font(.body)
+                    .foregroundColor(AppColors.labelPrimary)
+                Text(timeString)
+                    .font(.caption)
+                    .foregroundColor(TimetableStyle.timeColor)
+            }
             Spacer()
             Text(status.rawValue)
                 .font(.body)
@@ -22,6 +29,6 @@ struct SubjectRowView: View {
 
 #Preview {
     List {
-        SubjectRowView(subjectName: "AWS演習", date: .now, status: .attendance)
+        SubjectRowView(subjectName: "AWS演習", date: .now, timeString: "09:15 - 10:45", status: .attendance)
     }
 }
