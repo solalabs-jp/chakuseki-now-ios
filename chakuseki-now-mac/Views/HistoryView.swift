@@ -6,19 +6,28 @@ struct HistoryView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack {
+            VStack(alignment: .leading, spacing: 0) {
+                HStack {
                     Text("履歴を確認しよう")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-
-                    CustomCalendarView(currentDate: $currentDate, selectedDate: $selectedDate)
+                        .font(.system(size: 24, weight: .bold))
+                        .kerning(0.4)
+                        .foregroundColor(AppColors.labelPrimary)
+                        .frame(width: 241, height: 41, alignment: .topLeading)
                     
-                    SelectedDateDisplayView(date: selectedDate)
+                    Spacer()
+                }
+
+                ScrollView {
+                    VStack(spacing: 0) {
+                        CustomCalendarView(currentDate: $currentDate, selectedDate: $selectedDate)
+                        
+                        SelectedDateDisplayView(date: selectedDate)
+                    }
                 }
             }
+            .padding(.top, 1.5)
+            .padding(.horizontal)
+            .padding(.bottom)
         }
     }
 }
@@ -26,3 +35,4 @@ struct HistoryView: View {
 #Preview {
     HistoryView()
 }
+
