@@ -10,7 +10,7 @@ enum TimetableStyle {
     
     // レイアウト
     static let horizontalPadding: CGFloat = 16
-    static let topPadding: CGFloat = 16
+    static let topPadding: CGFloat = 8
     
     // フォント
     static let dateFont: Font = .headline
