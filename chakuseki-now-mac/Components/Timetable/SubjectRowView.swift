@@ -17,9 +17,20 @@ struct SubjectRowView: View {
                     .foregroundColor(TimetableStyle.timeColor)
             }
             Spacer()
-            Text(status.rawValue)
-                .font(.body)
-                .foregroundColor(status.color)
+            HStack(spacing: 4) {
+                Image(systemName: status.iconName)
+                    .font(.system(size: 10))
+                Text(status.rawValue)
+                    .font(.system(size: 12, weight: .bold))
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .foregroundColor(status.color)
+            .background(status.pillBackgroundColor)
+            .clipShape(Capsule())
+            .overlay(
+                Capsule().stroke(status.pillBorderColor, lineWidth: 1)
+            )
             Image(systemName: "chevron.right")
                 .font(.caption)
                 .foregroundColor(AppColors.labelSecondary)

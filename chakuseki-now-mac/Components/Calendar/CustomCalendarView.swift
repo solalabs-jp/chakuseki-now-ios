@@ -74,7 +74,7 @@ struct CustomCalendarView: View {
             RoundedRectangle(cornerRadius: 16)
                 .stroke(AppColors.calendarDebugBorder, lineWidth: 1)
         )
-        .padding()
+        .padding(.vertical)
     }
 
     private func statuses(for date: Date) -> [AttendanceStatus] {

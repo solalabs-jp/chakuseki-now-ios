@@ -9,7 +9,7 @@ struct SelectedDateDisplayView: View {
             Text(displayDate.formatted(.dateTime.month().day().weekday(.abbreviated).locale(CalendarStyle.locale)))
                 .font(TimetableStyle.dateFont)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding([.top, .leading], TimetableStyle.horizontalPadding)
+                .padding(.top, TimetableStyle.horizontalPadding)
             
             VStack(spacing: TimetableStyle.spacing) {
                 SubjectButtonView(subjectName: "AWS演習", date: displayDate, timeString: "09:15 - 10:45", status: .attendance)
@@ -17,7 +17,6 @@ struct SelectedDateDisplayView: View {
                 SubjectButtonView(subjectName: "テスト2", date: displayDate, timeString: "13:20 - 14:50", status: .tardiness)
                 SubjectButtonView(subjectName: "テスト3", date: displayDate, timeString: "15:05 - 16:00", status: .earlyDeparture)
             }
-            .padding(.horizontal)
         }
     }
 }
