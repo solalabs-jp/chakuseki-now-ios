@@ -30,6 +30,35 @@ struct AttendanceRecord: Identifiable {
     let status: AttendanceStatus
 }
 
+extension AttendanceRecord {
+    static let sampleHistory: [AttendanceRecord] = [
+        sample(sessionNumber: 10, month: 10, day: 22, status: .officialAbsence),
+        sample(sessionNumber: 9, month: 10, day: 20, status: .attendance),
+        sample(sessionNumber: 8, month: 10, day: 18, status: .attendance),
+        sample(sessionNumber: 7, month: 10, day: 15, status: .absence),
+        sample(sessionNumber: 6, month: 10, day: 13, status: .earlyDeparture),
+    ]
+
+    private static func sample(
+        sessionNumber: Int,
+        month: Int,
+        day: Int,
+        status: AttendanceStatus
+    ) -> AttendanceRecord {
+        let calendar = Calendar.current
+        let currentYear = calendar.component(.year, from: .now)
+        let sampleDate = calendar.date(
+            from: DateComponents(year: currentYear, month: month, day: day)
+        ) ?? .now
+
+        return AttendanceRecord(
+            sessionNumber: sessionNumber,
+            date: sampleDate,
+            status: status
+        )
+    }
+}
+
 struct Subject: Identifiable {
     let id = UUID()
     let name: String
@@ -82,4 +111,3 @@ extension AttendanceStatus {
         }
     }
 }
-

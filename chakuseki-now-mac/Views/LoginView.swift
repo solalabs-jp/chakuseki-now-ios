@@ -5,6 +5,7 @@ struct LoginView: View {
 
     @State private var studentID = ""
     @State private var password = ""
+    @State private var isShowingForgotPassword = false
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -17,10 +18,15 @@ struct LoginView: View {
             )
             .padding(.top, 218)
 
-            ForgotPasswordTextView()
+            ForgotPasswordTextView {
+                isShowingForgotPassword = true
+            }
                 .padding(.top, 538)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .sheet(isPresented: $isShowingForgotPassword) {
+            ForgotPasswordView()
+        }
     }
 }
 

@@ -9,10 +9,8 @@ struct HomeView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack {
-                GreetingView(isAttended: submittedAnswer != nil)
-                Spacer() 
-            }
+            GreetingView(isAttended: submittedAnswer != nil)
+                .padding(.horizontal, -16)
 
             StatusView(status: currentStatus, isAttended: submittedAnswer != nil)
                 .padding(.top, 61)
