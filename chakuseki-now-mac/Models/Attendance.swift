@@ -81,5 +81,20 @@ extension AttendanceStatus {
         case .tardiness: return AppColors.pillTardinessBorder
         }
     }
+    
+    var calendarColor: Color {
+        switch self {
+        case .attendance:
+            return AppColors.statusEarlyDeparture // Green
+        case .absence:
+            return AppColors.statusAbsence // Red
+        case .officialAbsence:
+            return AppColors.statusAttendance // Blue
+        case .bereavement:
+            return AppColors.statusBereavement // Gray
+        case .earlyDeparture, .tardiness:
+            return AppColors.statusTardiness // Yellow
+        }
+    }
 }
 
