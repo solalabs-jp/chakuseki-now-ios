@@ -50,7 +50,7 @@ private struct MainTabView: View {
                 .tag(2)
         }
         .padding(.horizontal)
-        .padding(.bottom)
+       
     }
 }
 
