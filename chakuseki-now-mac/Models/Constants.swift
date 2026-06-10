@@ -36,7 +36,7 @@ enum AppColors {
     static let calendarControl = Color.red
     static let calendarMarker = Color.gray.opacity(0.5)
     static let calendarHeaderBackground = Color.secondary.opacity(0.1)
-    static let calendarBackground = Color.secondary.opacity(0.05)
+    static let calendarBackground = AppColors.white
     static let calendarDebugBorder = Color.red
 
     static let timetableRowBackground = AppColors.white
