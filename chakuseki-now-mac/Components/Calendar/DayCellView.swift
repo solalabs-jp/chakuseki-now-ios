@@ -18,7 +18,7 @@ struct DayCellView: View {
                 HStack(spacing: 2) {
                     ForEach(0..<statuses.count, id: \.self) { index in
                         Circle()
-                            .fill(statuses[index].color)
+                            .fill(statuses[index].calendarColor)
                             .frame(width: CalendarStyle.markerSize, height: CalendarStyle.markerSize)
                     }
                 }

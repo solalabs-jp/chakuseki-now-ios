@@ -66,28 +66,64 @@ struct CustomCalendarView: View {
                     }
                 }
             }
+            
+            Divider()
+                .background(AppColors.cardBorder.opacity(0.3))
+                .padding(.horizontal, -16)
+            
+            HStack(spacing: 0) {
+                Spacer()
+                legendItem(color: AppColors.statusEarlyDeparture, text: "出席")
+                Spacer()
+                legendItem(color: AppColors.statusAbsence, text: "欠席")
+                Spacer()
+                legendItem(color: AppColors.statusTardiness, text: "早退・中抜け")
+                Spacer()
+                legendItem(color: AppColors.statusAttendance, text: "公欠")
+                Spacer()
+            }
+            .padding(.top, 4)
+            .padding(.bottom, 4)
         }
         .padding()
         .background(AppColors.calendarBackground)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(AppColors.calendarDebugBorder, lineWidth: 1)
+                .stroke(AppColors.cardBorder, lineWidth: 1)
         )
         .padding(.vertical)
     }
 
-    private func statuses(for date: Date) -> [AttendanceStatus] {
-        // デモ用に、日付に応じて授業のステータスを返します
-        let day = calendar.component(.day, from: date)
-        if day % 3 == 0 {
-            return [.attendance, .absence, .tardiness, .earlyDeparture]
-        } else if day % 2 == 0 {
-            return [.attendance, .attendance]
-        } else if day % 5 == 0 {
-            return [.officialAbsence]
+    @ViewBuilder
+    private func legendItem(color: Color, text: String) -> some View {
+        HStack(spacing: 4) {
+            Circle()
+                .fill(color)
+                .frame(width: 8, height: 8)
+            Text(text)
+                .font(.system(size: 11, weight: .bold))
+                .foregroundColor(AppColors.brownText)
         }
-        return []
+    }
+
+    private func statuses(for date: Date) -> [AttendanceStatus] {
+        // デモ用に、スクショを再現するステータスを返します
+        let day = calendar.component(.day, from: date)
+        switch day {
+        case 2, 3, 4, 10, 11, 12:
+            return [.attendance]
+        case 5:
+            return [.absence]
+        case 6:
+            return [.attendance, .earlyDeparture]
+        case 9:
+            return [.officialAbsence]
+        case 13:
+            return [.attendance, .officialAbsence]
+        default:
+            return []
+        }
     }
 
     private func previousMonth() {

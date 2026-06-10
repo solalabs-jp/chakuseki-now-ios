@@ -71,7 +71,7 @@ enum AppColors {
     // Pill backgrounds
     static let pillAttendanceBackground = statusAttendance.opacity(0.12)
     static let pillAbsenceBackground = Color(red: 0xFF / 255.0, green: 0xDA / 255.0, blue: 0xD6 / 255.0).opacity(absenceBackgroundOpacity)
-    static let pillOfficialAbsenceBackground = officialAbsenceBorder
+    static let pillOfficialAbsenceBackground = officialAbsenceBackground
     static let pillBereavementBackground = statusBereavement.opacity(0.12)
     static let pillEarlyDepartureBackground = statusEarlyDeparture.opacity(0.12)
     static let pillTardinessBackground = statusTardiness.opacity(0.12)
@@ -79,7 +79,7 @@ enum AppColors {
     // Pill borders
     static let pillAttendanceBorder = statusAttendance.opacity(0.25)
     static let pillAbsenceBorder = Color(red: 0xE4 / 255.0, green: 0xBE / 255.0, blue: 0xB8 / 255.0) // E4BEB8 (outline)
-    static let pillOfficialAbsenceBorder = statusOfficialAbsence
+    static let pillOfficialAbsenceBorder = officialAbsenceBorder
     static let pillBereavementBorder = statusBereavement.opacity(0.25)
     static let pillEarlyDepartureBorder = statusEarlyDeparture.opacity(0.25)
     static let pillTardinessBorder = statusTardiness.opacity(0.25)
