@@ -7,15 +7,7 @@ struct HistoryView: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 0) {
-                HStack {
-                    Text("履歴を確認しよう")
-                        .font(.system(size: 24, weight: .bold))
-                        .kerning(0.4)
-                        .foregroundColor(AppColors.labelPrimary)
-                        .frame(width: 241, height: 41, alignment: .topLeading)
-                    
-                    Spacer()
-                }
+                LeadingTitleView(title: "履歴を確認しよう")
 
                 ScrollView {
                     VStack(spacing: 0) {
@@ -35,4 +27,3 @@ struct HistoryView: View {
 #Preview {
     HistoryView()
 }
-
