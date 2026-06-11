@@ -9,7 +9,6 @@ struct SelectedDateDisplayView: View {
             Text(displayDate.formatted(.dateTime.month().day().weekday(.abbreviated).locale(CalendarStyle.locale)))
                 .font(TimetableStyle.dateFont)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.top, TimetableStyle.horizontalPadding)
             
             VStack(spacing: TimetableStyle.spacing) {
                 SubjectButtonView(subjectName: "AWS演習", date: displayDate, timeString: "09:15 - 10:45", status: .attendance)
