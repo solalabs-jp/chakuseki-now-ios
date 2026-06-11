@@ -6,7 +6,7 @@ enum TimetableStyle {
     static let outlineColor = AppColors.timetableRowOutline
     static let timeColor = AppColors.timetableRowTime
     static let cornerRadius: CGFloat = 12
-    static let spacing: CGFloat = 12
+    static let spacing: CGFloat = 8
     
     // レイアウト
     static let horizontalPadding: CGFloat = 16

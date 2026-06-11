@@ -10,7 +10,7 @@ struct HistoryView: View {
                 LeadingTitleView(title: "履歴を確認しよう")
 
                 ScrollView {
-                    VStack(spacing: 0) {
+                    VStack(spacing: 40) {
                         CustomCalendarView(currentDate: $currentDate, selectedDate: $selectedDate)
                         
                         SelectedDateDisplayView(date: selectedDate)
@@ -18,7 +18,6 @@ struct HistoryView: View {
                 }
             }
             .padding(.top, 1.5)
-            .padding(.horizontal)
             .padding(.bottom)
         }
     }

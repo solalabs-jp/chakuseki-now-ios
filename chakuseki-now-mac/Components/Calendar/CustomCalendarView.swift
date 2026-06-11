@@ -92,7 +92,7 @@ struct CustomCalendarView: View {
             RoundedRectangle(cornerRadius: 16)
                 .stroke(AppColors.cardBorder, lineWidth: 1)
         )
-        .padding(.vertical)
+        .padding(.top, 16)
     }
 
     @ViewBuilder
