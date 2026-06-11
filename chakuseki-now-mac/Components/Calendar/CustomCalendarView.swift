@@ -71,16 +71,12 @@ struct CustomCalendarView: View {
                 .background(AppColors.cardBorder.opacity(0.3))
                 .padding(.horizontal, -16)
             
-            HStack(spacing: 0) {
-                Spacer()
-                legendItem(color: AppColors.statusEarlyDeparture, text: "出席")
-                Spacer()
-                legendItem(color: AppColors.statusAbsence, text: "欠席")
-                Spacer()
-                legendItem(color: AppColors.statusTardiness, text: "早退・中抜け")
-                Spacer()
-                legendItem(color: AppColors.statusAttendance, text: "公欠")
-                Spacer()
+            HStack(spacing: 12) {
+                Spacer(minLength: 0)
+                ForEach([AttendanceStatus.attendance, AttendanceStatus.absence, AttendanceStatus.earlyDeparture, AttendanceStatus.tardiness, AttendanceStatus.officialAbsence, AttendanceStatus.bereavement], id: \.self) { status in
+                    legendItem(color: status.color, text: status.rawValue)
+                }
+                Spacer(minLength: 0)
             }
             .padding(.top, 4)
             .padding(.bottom, 4)
@@ -92,7 +88,6 @@ struct CustomCalendarView: View {
             RoundedRectangle(cornerRadius: 16)
                 .stroke(AppColors.cardBorder, lineWidth: 1)
         )
-        .padding(.top, 16)
     }
 
     @ViewBuilder

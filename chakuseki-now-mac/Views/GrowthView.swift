@@ -7,7 +7,7 @@ struct GrowthView: View {
                 .padding(.horizontal, -16)
 
             ProfileCardView()
-                .padding(.top, 61)
+                .padding(.top, Constants.headerTopSpacing)
                 .padding(.horizontal, -16)
 
             Spacer()

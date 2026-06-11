@@ -4,7 +4,11 @@ struct HistoryDetailView: View {
     let subjectName: String
     let date: Date
 
-    private let attendanceRecords = AttendanceRecord.sampleHistory
+    private var attendanceRecords: [AttendanceRecord] {
+        AttendanceRecord.sampleHistory.map { record in
+            AttendanceRecord(sessionNumber: record.sessionNumber, date: record.date, status: .bereavement)
+        }
+    }
     private let totalSessions = 30
 
     var body: some View {

@@ -88,4 +88,6 @@ enum AppColors {
 struct Constants {
     // Figma等で指定されている色。一旦は標準のprimaryカラーを当てています。
     static let LabelsVibrantPrimary = AppColors.labelPrimary
+    // 共通のヘッダ—コンテンツ間のトップ間隔
+    static let headerTopSpacing: CGFloat = 61
 }

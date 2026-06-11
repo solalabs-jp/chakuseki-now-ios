@@ -13,7 +13,7 @@ struct HomeView: View {
                 .padding(.horizontal, -16)
 
             StatusView(status: currentStatus, isAttended: submittedAnswer != nil)
-                .padding(.top, 61)
+                .padding(.top, Constants.headerTopSpacing)
                 .padding(.horizontal, -16)
 
             if currentStatus == .searching {

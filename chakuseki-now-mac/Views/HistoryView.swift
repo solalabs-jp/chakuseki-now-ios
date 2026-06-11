@@ -12,6 +12,7 @@ struct HistoryView: View {
                 ScrollView {
                     VStack(spacing: 40) {
                         CustomCalendarView(currentDate: $currentDate, selectedDate: $selectedDate)
+                            .padding(.top, Constants.headerTopSpacing)
                         
                         SelectedDateDisplayView(date: selectedDate)
                     }
