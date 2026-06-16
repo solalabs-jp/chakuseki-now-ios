@@ -16,7 +16,7 @@ struct AttendanceSummaryCardView: View {
             LegendItem(title: "遅刻", count: counts[.tardiness] ?? 0, color: AppColors.statusTardiness),
             LegendItem(title: "早退", count: counts[.earlyDeparture] ?? 0, color: AppColors.statusEarlyDeparture),
             LegendItem(title: "公欠", count: counts[.officialAbsence] ?? 0, color: AppColors.statusOfficialAbsence),
-            LegendItem(title: "全授業", count: totalSessions, color: .primary)
+            LegendItem(title: "忌引き", count: counts[.bereavement] ?? 0, color: AppColors.statusBereavement)
         ]
     }
 

@@ -4,16 +4,14 @@ struct HistoryDetailView: View {
     let subjectName: String
     let date: Date
 
-    private var attendanceRecords: [AttendanceRecord] {
-        AttendanceRecord.sampleHistory.map { record in
-            AttendanceRecord(sessionNumber: record.sessionNumber, date: record.date, status: .bereavement)
-        }
-    }
+    private let attendanceRecords = AttendanceRecord.sampleHistory
     private let totalSessions = 30
 
     var body: some View {
         ScrollView {
             VStack(spacing: 32) {
+                LeadingTitleView(title: subjectName)
+
                 AttendanceSummaryCardView(
                     records: attendanceRecords,
                     totalSessions: totalSessions
@@ -23,8 +21,7 @@ struct HistoryDetailView: View {
             }
             .padding()
         }
-        .navigationTitle(subjectName)
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {}) {
