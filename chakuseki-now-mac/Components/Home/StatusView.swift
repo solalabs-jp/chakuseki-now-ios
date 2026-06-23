@@ -12,6 +12,9 @@ struct StatusView: View {
     var status: Status
     // 3ページ目（出席完了）かどうか
     var isAttended: Bool = false
+    
+    // 先生の名前 (UUIDから識別したもの)
+    var teacherName: String? = nil
 
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
@@ -56,7 +59,8 @@ struct StatusView: View {
             }
 
             // Space Between
-            Text(status == .searching ? "先生の信号を検索しています..." : "先生の信号と接続中...")
+            let displayTeacher = (status == .connecting ? teacherName : nil) ?? "先生"
+            Text(status == .searching ? "\(displayTeacher)の信号を検索しています..." : "\(displayTeacher)の信号と接続中...")
                 .font(.system(size: 17, weight: .bold))
                 .foregroundColor(AppColors.labelPrimary)
                 .frame(height: 40, alignment: .top)
