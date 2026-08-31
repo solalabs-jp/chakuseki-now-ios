@@ -1,4 +1,4 @@
-# chakuseki-now-mac 📱💻
+# chakuseki-now-ios 📱💻
 
 このプロジェクトは、SwiftUIとSwiftDataを使用して構築された「着席状況」を管理するためのアプリケーションです。
 
@@ -15,7 +15,7 @@
 
 このディレクトリにある以下のファイルをダブルクリックしてXcodeを起動します。
 
-- `chakuseki-now-mac.xcodeproj`
+- `chakuseki-now-ios.xcodeproj`
 
 ### 3. デバイスの選択
 
@@ -36,7 +36,7 @@ Xcodeの画面上部中央にあるデバイス選択ボタンをクリックし
 
 ## 📁 フォルダ構成の解説
 
-- **`chakuseki-now-mac/`**: アプリのメインソースコード。
+- **`chakuseki-now-ios/`**: アプリのメインソースコード。
   - `ContentView.swift`: 画面のデザイン。
-  - `chakuseki_now_macApp.swift`: アプリの起動設定。
-- **`chakuseki-now-mac.xcodeproj`**: このファイルを開いて開発を開始します。
+  - `chakuseki_now_iosApp.swift`: アプリの起動設定。
+- **`chakuseki-now-ios.xcodeproj`**: このファイルを開いて開発を開始します。
