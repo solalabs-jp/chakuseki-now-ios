@@ -30,6 +30,8 @@ final class AttendanceCheckInService {
     private static let heartbeatSeconds: UInt64 = 60
     /// 直近この秒数以内にビーコンを検知していれば「圏内」とみなす。
     private static let presenceStaleSeconds: TimeInterval = 90
+    /// 監視開始直後、測距が温まるまでの猶予。この間に一度も検知が無くても「圏外」とは判定しない。
+    private static let monitorWarmupSeconds: TimeInterval = 120
     /// この秒数以上連続でビーコンが途切れたら「中抜け（mid_absence）」と自動判定。仕様 4.1: 30 分。
     private static let absenceThresholdSeconds: TimeInterval = 30 * 60
 
@@ -424,6 +426,7 @@ final class AttendanceCheckInService {
         beaconLastSeen: @MainActor @Sendable () -> Date?
     ) async {
         let recordRef = db.collection("attendanceRecords").document(context.recordDocId)
+        let monitorStartedAt = Date()
         var awaySince: Date?
         var cumulativeAwaySeconds: TimeInterval = 0
         var flaggedMidAbsence = false
@@ -434,6 +437,14 @@ final class AttendanceCheckInService {
 
             let lastSeen = beaconLastSeen()
             let inRange = lastSeen.map { now.timeIntervalSince($0) <= Self.presenceStaleSeconds } ?? false
+
+            // 測距開始直後にまだ一度も検知が無い間は判定を保留（誤「圏外」で記録を壊さないため）。
+            if !inRange, lastSeen == nil,
+               now.timeIntervalSince(monitorStartedAt) < Self.monitorWarmupSeconds {
+                monitorInfo = "ビーコンを検索中です…"
+                try? await Task.sleep(nanoseconds: Self.heartbeatSeconds * 1_000_000_000)
+                continue
+            }
 
             if inRange {
                 if let since = awaySince {

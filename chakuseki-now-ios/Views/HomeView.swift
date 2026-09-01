@@ -12,6 +12,9 @@ struct HomeView: View {
     @State private var checkIn = AttendanceCheckInService()
     @StateObject private var beaconManager = BeaconManager()
 
+    /// 教員ビーコンが1つも取得できなかった場合のフォールバック（検索UIと揃える）。
+    private let fallbackBeaconUUID = UUID(uuidString: "01020304-0506-0708-090A-0B0C0D0E0F10")
+
     var teacherName: String? {
         if let resolved = checkIn.teacherName, !resolved.isEmpty {
             return resolved
@@ -127,9 +130,22 @@ struct HomeView: View {
             submittedTime = restored.time
             detectedUUID = nil
             currentStatus = .connecting
+            // 復元経路では検索UI(HomeSearchingContentView)が表示されないため、
+            // ここで明示的に測距を開始しないと beaconManager.lastSeenAt が nil のままになり、
+            // 滞在監視が毎ハートビート「圏外」判定となって在室中の生徒の記録を破壊する。
+            await startBeaconScan()
             startMonitoring()
         }
         isRestoring = false
+    }
+
+    /// 教員ビーコンの測距を開始する。取得できなければフォールバック UUID を使う。
+    private func startBeaconScan() async {
+        var uuids = await checkIn.fetchTeacherBeaconUUIDs()
+        if uuids.isEmpty, let fallbackBeaconUUID {
+            uuids = [fallbackBeaconUUID]
+        }
+        beaconManager.start(uuids: uuids)
     }
 
     private func startMonitoring() {
