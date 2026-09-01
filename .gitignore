@@ -1,0 +1,11 @@
+# macOS
+.DS_Store
+
+# Xcode - ユーザー個別データ
+xcuserdata/
+*.xcuserstate
+xcschememanagement.plist
+UserInterfaceState.xcuserstate
+
+# Firebase 設定（各自ローカルに配置）
+GoogleService-Info.plist
