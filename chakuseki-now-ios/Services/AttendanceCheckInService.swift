@@ -335,7 +335,14 @@ final class AttendanceCheckInService {
                 let classEnd: Date
             }
 
-            var slots: [Slot] = []
+            struct ScheduleEntry {
+                let scheduleId: String
+                let subjectName: String?
+                let classStart: Date
+                let classEnd: Date
+            }
+
+            var entries: [ScheduleEntry] = []
             for scheduleDoc in scheduleSnapshot.documents {
                 let scheduleData = scheduleDoc.data()
                 guard let periodId = scheduleData["periodId"] as? String,
@@ -344,21 +351,48 @@ final class AttendanceCheckInService {
                       let classEnd = Self.time(hhmm: window.end) else {
                     continue
                 }
-                let dailySnapshot = try await db.collection("dailySessions")
-                    .whereField("scheduleId", isEqualTo: scheduleDoc.documentID)
-                    .getDocuments()
-                guard let dailyDoc = dailySnapshot.documents.first(where: {
-                    ($0.data()["date"] as? Timestamp).map { Self.isSameJSTDay($0.dateValue(), today) } ?? false
-                }) else { continue }
-
-                slots.append(Slot(
-                    dailySessionId: dailyDoc.documentID,
+                entries.append(ScheduleEntry(
                     scheduleId: scheduleDoc.documentID,
                     subjectName: scheduleData["subjectName"] as? String,
-                    teacherId: dailyDoc.data()["teacherId"] as? String,
                     classStart: classStart,
                     classEnd: classEnd
                 ))
+            }
+
+            // 当日 (JST) の判定境界。@Sendable クロージャ内で Self. を参照しないよう先に Date 化しておく。
+            var jstCalendar = Calendar(identifier: .gregorian)
+            jstCalendar.timeZone = Self.jst
+            let dayStart = jstCalendar.startOfDay(for: today)
+            let dayEnd = jstCalendar.date(byAdding: .day, value: 1, to: dayStart) ?? dayStart.addingTimeInterval(86_400)
+
+            // schedule ごとの dailySessions 取得を並列化（N+1 の直列 await で Home 描画がブロックされるのを避ける）。
+            let db = self.db
+            let slots: [Slot] = try await withThrowingTaskGroup(of: Slot?.self) { group in
+                for entry in entries {
+                    group.addTask {
+                        let dailySnapshot = try await db.collection("dailySessions")
+                            .whereField("scheduleId", isEqualTo: entry.scheduleId)
+                            .getDocuments()
+                        guard let dailyDoc = dailySnapshot.documents.first(where: {
+                            guard let date = ($0.data()["date"] as? Timestamp)?.dateValue() else { return false }
+                            return date >= dayStart && date < dayEnd
+                        }) else { return nil }
+                        return Slot(
+                            dailySessionId: dailyDoc.documentID,
+                            scheduleId: entry.scheduleId,
+                            subjectName: entry.subjectName,
+                            teacherId: dailyDoc.data()["teacherId"] as? String,
+                            classStart: entry.classStart,
+                            classEnd: entry.classEnd
+                        )
+                    }
+                }
+                var collected: [Slot] = []
+                for try await slot in group {
+                    if let slot { collected.append(slot) }
+                }
+                // 完了順は不定なので開始時刻で整列（後続の「現在の授業」判定を安定させる）。
+                return collected.sorted { $0.classStart < $1.classStart }
             }
 
             let now = Date()
