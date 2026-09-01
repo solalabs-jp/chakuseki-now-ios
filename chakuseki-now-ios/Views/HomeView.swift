@@ -67,12 +67,19 @@ struct HomeView: View {
                     submittedAnswer: submittedAnswer,
                     submittedTime: submittedTime
                 ) { sentText in
+                    let previousAnswer = submittedAnswer
+                    let previousTime = submittedTime
                     submittedAnswer = sentText
                     submittedTime = Date()
                     Task {
                         await checkIn.submitComment(sentText)
                         if checkIn.phase == .confirmed {
                             startMonitoring()
+                        } else {
+                            // 送信失敗（オフライン等で phase = .failed）: 楽観的更新を元に戻し、
+                            // 入力欄を再表示して再送可能にする。
+                            submittedAnswer = previousAnswer
+                            submittedTime = previousTime
                         }
                     }
                 }
@@ -132,14 +139,14 @@ struct HomeView: View {
             currentStatus = .connecting
             // 復元経路では検索UI(HomeSearchingContentView)が表示されないため、
             // ここで明示的に測距を開始しないと beaconManager.lastSeenAt が nil のままになり、
-            // 滞在監視が毎ハートビート「圏外」判定となって在室中の生徒の記録を破壊する。
+            // 滞在監視が毎ハートビート「圏外」判定となって在室中の生徒の記録を破壊。
             await startBeaconScan()
             startMonitoring()
         }
         isRestoring = false
     }
 
-    /// 教員ビーコンの測距を開始する。取得できなければフォールバック UUID を使う。
+    /// 教員ビーコンの測距を開始。取得できなければフォールバック UUID を使う
     private func startBeaconScan() async {
         var uuids = await checkIn.fetchTeacherBeaconUUIDs()
         if uuids.isEmpty, let fallbackBeaconUUID {
@@ -148,10 +155,12 @@ struct HomeView: View {
         beaconManager.start(uuids: uuids)
     }
 
+    /// 滞在監視を開始（監視は生徒ごとのバックグラウンドタスクで独立して動作）
     private func startMonitoring() {
         checkIn.startMonitoring(beaconLastSeen: { [beaconManager] in beaconManager.lastSeenAt })
     }
 
+    /// ホームタブ再選択時: 送信済みなら結果画面を復元、なければ検索から開始
     private func resetToFirstPage() async {
         checkIn.reset()
         beaconManager.stop()
