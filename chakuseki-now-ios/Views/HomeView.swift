@@ -71,17 +71,16 @@ struct HomeView: View {
                     let previousTime = submittedTime
                     submittedAnswer = sentText
                     submittedTime = Date()
-                    Task {
-                        await checkIn.submitComment(sentText)
-                        if checkIn.phase == .confirmed {
-                            startMonitoring()
-                        } else {
-                            // 送信失敗（オフライン等で phase = .failed）: 楽観的更新を元に戻し、
-                            // 入力欄を再表示して再送可能にする。
-                            submittedAnswer = previousAnswer
-                            submittedTime = previousTime
-                        }
+                    await checkIn.submitComment(sentText)
+                    if checkIn.phase == .confirmed {
+                        startMonitoring()
+                        return true
                     }
+                    // 送信失敗（オフライン等で phase = .failed）: 楽観的更新を元に戻し、
+                    // 入力欄（内容は保持）を再表示して再送可能にする。
+                    submittedAnswer = previousAnswer
+                    submittedTime = previousTime
+                    return false
                 }
                 .padding(.top, 24)
 

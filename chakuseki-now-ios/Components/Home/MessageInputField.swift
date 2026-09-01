@@ -7,17 +7,24 @@ struct MessageInputField: View {
     private let inputBoxHeight: CGFloat = 96
 
     @State private var inputText: String = ""
+    @State private var isSending = false
     @FocusState private var isInputFocused: Bool
-    var onSend: (String) -> Void
+    /// 送信を実行し、成功なら `true` を返す。失敗時は入力内容を残して再送できるようにする。
+    var onSend: (String) async -> Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             inputTextBox
 
             Button(action: {
-                onSend(inputText)
-                inputText = ""
+                let text = inputText
                 isInputFocused = false
+                isSending = true
+                Task {
+                    let succeeded = await onSend(text)
+                    isSending = false
+                    if succeeded { inputText = "" }
+                }
             }) {
                 HStack(alignment: .center, spacing: 8) {
                     Image("check")
@@ -32,11 +39,11 @@ struct MessageInputField: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
                 .frame(maxWidth: .infinity, alignment: .center)
-                .background(inputText.isEmpty ? AppColors.brandRedDisabled : AppColors.brandRedDeep)
+                .background(inputText.isEmpty || isSending ? AppColors.brandRedDisabled : AppColors.brandRedDeep)
                 .cornerRadius(12)
             }
             .buttonStyle(.plain)
-            .disabled(inputText.isEmpty)
+            .disabled(inputText.isEmpty || isSending)
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .topLeading)
@@ -95,6 +102,6 @@ struct MessageInputField: View {
 }
 
 #Preview {
-    MessageInputField { _ in }
+    MessageInputField { _ in true }
         .padding()
 }
