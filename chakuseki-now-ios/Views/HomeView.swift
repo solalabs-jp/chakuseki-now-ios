@@ -111,7 +111,9 @@ struct HomeView: View {
 
     @ViewBuilder
     private var statusMessage: some View {
-        if let errorMessage = checkIn.errorMessage {
+        if beaconManager.permissionDenied {
+            message("位置情報が許可されていないため滞在確認ができません。設定アプリで許可してください。", color: AppColors.statusAbsence)
+        } else if let errorMessage = checkIn.errorMessage {
             message(errorMessage, color: AppColors.statusAbsence)
         } else if checkIn.confirmedStatus == "mid_absence" || checkIn.confirmedStatus == "early_leave" {
             message(checkIn.monitorInfo ?? "自動判定フラグあり（先生の承認・修正待ち）", color: AppColors.statusAbsence)
