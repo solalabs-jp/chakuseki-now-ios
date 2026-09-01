@@ -442,11 +442,16 @@ final class AttendanceCheckInService {
     /// コメント送信後、授業終了まで前面でビーコンの圏内/圏外を監視し、
     /// `lastDetectedAt` / `absenceMinutes` を更新、30分以上途切れたら `mid_absence` に自動フラグ。
     /// `beaconLastSeen` は BeaconManager の `lastSeenAt` を返すクロージャ。
-    func startMonitoring(beaconLastSeen: @escaping @MainActor @Sendable () -> Date?) {
+    /// `rangingBlocked` は測距が開始できていない（位置情報権限の拒否等）ときに `true` を返すクロージャ。
+    /// このとき、まだ一度も検知が無ければ「圏外」と断定せず判定を保留する。
+    func startMonitoring(
+        beaconLastSeen: @escaping @MainActor @Sendable () -> Date?,
+        rangingBlocked: @escaping @MainActor @Sendable () -> Bool = { false }
+    ) {
         guard let context, phase == .confirmed else { return }
         monitorTask?.cancel()
         monitorTask = Task { [weak self] in
-            await self?.runMonitor(context: context, beaconLastSeen: beaconLastSeen)
+            await self?.runMonitor(context: context, beaconLastSeen: beaconLastSeen, rangingBlocked: rangingBlocked)
         }
     }
 
@@ -457,7 +462,8 @@ final class AttendanceCheckInService {
 
     private func runMonitor(
         context: Context,
-        beaconLastSeen: @MainActor @Sendable () -> Date?
+        beaconLastSeen: @MainActor @Sendable () -> Date?,
+        rangingBlocked: @MainActor @Sendable () -> Bool
     ) async {
         let recordRef = db.collection("attendanceRecords").document(context.recordDocId)
         let monitorStartedAt = Date()
@@ -472,10 +478,14 @@ final class AttendanceCheckInService {
             let lastSeen = beaconLastSeen()
             let inRange = lastSeen.map { now.timeIntervalSince($0) <= Self.presenceStaleSeconds } ?? false
 
-            // 測距開始直後にまだ一度も検知が無い間は判定を保留（誤「圏外」で記録を壊さないため）。
+            // まだ一度も検知が無い状態では「圏外」と断定しない（誤判定で在室中の記録を壊さないため）:
+            //  - 測距開始直後のウォームアップ中
+            //  - 位置情報権限の拒否等で測距自体が始まっていない（この間はずっと保留）
             if !inRange, lastSeen == nil,
-               now.timeIntervalSince(monitorStartedAt) < Self.monitorWarmupSeconds {
-                monitorInfo = "ビーコンを検索中です…"
+               rangingBlocked() || now.timeIntervalSince(monitorStartedAt) < Self.monitorWarmupSeconds {
+                monitorInfo = rangingBlocked()
+                    ? "位置情報が許可されていないため滞在確認ができません"
+                    : "ビーコンを検索中です…"
                 try? await Task.sleep(nanoseconds: Self.heartbeatSeconds * 1_000_000_000)
                 continue
             }

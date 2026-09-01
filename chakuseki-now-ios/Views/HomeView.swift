@@ -143,7 +143,12 @@ struct HomeView: View {
             // ここで明示的に測距を開始しないと beaconManager.lastSeenAt が nil のままになり、
             // 滞在監視が毎ハートビート「圏外」判定となって在室中の生徒の記録を破壊。
             await startBeaconScan()
-            startMonitoring()
+            // 位置情報権限が拒否されていると測距が始まらず lastSeenAt が nil のままになる。
+            // その状態で監視を回すと在室中でも mid_absence / early_leave を書き込むため開始しない
+            // （権限が付与され次第、次回の restoreOrSearch で開始される）。
+            if !beaconManager.permissionDenied {
+                startMonitoring()
+            }
         }
         isRestoring = false
     }
@@ -159,7 +164,10 @@ struct HomeView: View {
 
     /// 滞在監視を開始（監視は生徒ごとのバックグラウンドタスクで独立して動作）
     private func startMonitoring() {
-        checkIn.startMonitoring(beaconLastSeen: { [beaconManager] in beaconManager.lastSeenAt })
+        checkIn.startMonitoring(
+            beaconLastSeen: { [beaconManager] in beaconManager.lastSeenAt },
+            rangingBlocked: { [beaconManager] in beaconManager.permissionDenied }
+        )
     }
 
     /// ホームタブ再選択時: 送信済みなら結果画面を復元、なければ検索から開始
