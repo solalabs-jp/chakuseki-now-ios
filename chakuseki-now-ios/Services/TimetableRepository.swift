@@ -62,11 +62,13 @@ struct TimetableRepository {
     }
 
     private func fetchSchedules(classId: String?, periods: [String: PeriodInfo]) async throws -> [TimetableSlot] {
-        var query: Query = db.collection("schedules")
-        if let classId {
-            query = query.whereField("classId", isEqualTo: classId)
-        }
-        let snapshot = try await query.getDocuments()
+        // classId 未設定なら全クラスの schedules を引いてしまうため、空の時間割を返す
+        // （AttendanceCheckInService の profile.classId 一致チェックと挙動を揃える）。
+        guard let classId, !classId.isEmpty else { return [] }
+
+        let snapshot = try await db.collection("schedules")
+            .whereField("classId", isEqualTo: classId)
+            .getDocuments()
 
         return snapshot.documents.compactMap { document in
             let data = document.data()
