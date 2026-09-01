@@ -1,3 +1,9 @@
+# macOS
+.DS_Store
+
+# Xcode - ユーザー個別データ
+xcuserdata/
+*.xcuserstate
 xcschememanagement.plist
 UserInterfaceState.xcuserstate
 
