@@ -10,8 +10,25 @@ import Testing
 
 struct chakuseki_now_iosTests {
 
-    @Test func example() async throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    @Test func growthSystem_counts_exp_and_level() async throws {
+        let records = [
+            AttendanceRecord(sessionNumber: 1, date: .now, status: .attendance),
+            AttendanceRecord(sessionNumber: 2, date: .now, status: .attendance),
+            AttendanceRecord(sessionNumber: 3, date: .now, status: .tardiness),
+            AttendanceRecord(sessionNumber: 4, date: .now, status: .officialAbsence)
+        ]
+
+        #expect(GrowthSystem.totalExp(from: records) == 33)
+
+        let info = GrowthSystem.levelInfo(for: records)
+        #expect(info.level == 1)
+        #expect(info.remainingExpText == "進化まであと 147EXP!")
+    }
+
+    @Test func growthSystem_works_for_full_four_years() async throws {
+        let records = Array(repeating: AttendanceRecord(sessionNumber: 1, date: .now, status: .attendance), count: 1800)
+        let info = GrowthSystem.levelInfo(for: records)
+        #expect(info.level == 100)
     }
 
 }

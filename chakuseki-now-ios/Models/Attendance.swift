@@ -10,6 +10,17 @@ enum AttendanceStatus: String, CaseIterable, Identifiable {
     case tardiness = "遅刻"
     
     var id: String { self.rawValue }
+
+    var expPoint: Int {
+        switch self {
+        case .attendance: return 10
+        case .absence: return 0
+        case .officialAbsence: return 10
+        case .bereavement: return 0
+        case .earlyDeparture: return 0
+        case .tardiness: return 3
+        }
+    }
     
     var color: Color {
         switch self {
@@ -20,6 +31,45 @@ enum AttendanceStatus: String, CaseIterable, Identifiable {
         case .earlyDeparture: return AppColors.statusEarlyDeparture
         case .tardiness: return AppColors.statusTardiness
         }
+    }
+}
+
+struct GrowthLevelInfo {
+    let level: Int
+    let currentExp: Int
+    let progressRatio: Double
+    let levelTitle: String
+    let remainingExpText: String
+}
+
+enum GrowthSystem {
+    static let expPerLevel = 180
+    static let maxLevel = 100
+
+    static func totalExp(from records: [AttendanceRecord]) -> Int {
+        records.reduce(0) { total, record in
+            total + record.status.expPoint
+        }
+    }
+
+    static func levelInfo(for records: [AttendanceRecord]) -> GrowthLevelInfo {
+        let totalExp = max(0, totalExp(from: records))
+        let rawLevel = totalExp / expPerLevel
+        let level = min(maxLevel, rawLevel + 1)
+
+        let expInCurrentLevel = totalExp % expPerLevel
+        let remainingExp = max(0, expPerLevel - expInCurrentLevel)
+        let progressRatio = expPerLevel == 0 ? 0.0 : Double(expInCurrentLevel) / Double(expPerLevel)
+
+        return GrowthLevelInfo(
+            level: level,
+            currentExp: totalExp,
+            progressRatio: progressRatio,
+            levelTitle: "レベル \(level)",
+            remainingExpText: level >= maxLevel
+                ? "最大レベルです"
+                : "進化まであと \(remainingExp)EXP!"
+        )
     }
 }
 

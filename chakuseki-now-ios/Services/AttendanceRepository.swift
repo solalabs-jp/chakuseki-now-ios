@@ -20,6 +20,34 @@ struct AttendanceRepository {
         let totalSessions: Int
     }
 
+    /// 指定ユーザーの、全出席履歴を取得する。
+    func fetchAllRecords(for userId: String) async throws -> [AttendanceRecord] {
+        let snapshot = try await db.collection("attendanceRecords")
+            .whereField("userId", isEqualTo: userId)
+            .getDocuments()
+
+        let records = snapshot.documents.compactMap { document -> AttendanceRecord? in
+            let data = document.data()
+            guard
+                let statusValue = data["status"] as? String,
+                let status = AttendanceStatus(firestoreValue: statusValue),
+                let timestamp = (data["confirmedAt"] as? Timestamp)?.dateValue()
+                    ?? (data["firstDetectedAt"] as? Timestamp)?.dateValue()
+                    ?? (data["lastDetectedAt"] as? Timestamp)?.dateValue()
+            else {
+                return nil
+            }
+
+            return AttendanceRecord(
+                sessionNumber: 0,
+                date: timestamp,
+                status: status
+            )
+        }
+
+        return records.sorted { $0.date < $1.date }
+    }
+
     /// 指定ユーザーの、指定科目（`scheduleId`）に紐づく出席履歴を取得する。
     func fetchSubjectHistory(for userId: String, scheduleId: String) async throws -> SubjectHistory {
         async let recordsTask = db.collection("attendanceRecords")

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct GrowthView: View {
     @State private var auth = AuthService.shared
+    @State private var viewModel = GrowthViewModel()
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -15,8 +16,7 @@ struct GrowthView: View {
                         }
                     }
 
-                    // TODO: レベル・EXP（育成機能）は未実装のため一旦非表示
-                    // ProfileCardView()
+                    ProfileCardView(records: viewModel.records)
                 }
                 .padding(.top, 24)
             }
@@ -24,6 +24,16 @@ struct GrowthView: View {
         .padding(.top, 1.5)
         .padding(.horizontal)
         .padding(.bottom)
+        .task {
+            if let userId = auth.currentUserId {
+                await viewModel.load(for: userId)
+            }
+        }
+        .onChange(of: auth.currentUserId) { _, newUserId in
+            Task {
+                await viewModel.load(for: newUserId)
+            }
+        }
     }
 }
 
