@@ -34,10 +34,11 @@ struct ProfileCardView: View {
                 remainingExpText: remainingExpText
             )
         }
-        .frame(maxWidth: .infinity, minHeight: 358, maxHeight: 358)
+        .frame(maxWidth: .infinity)
         .background(AppColors.white)
         .cornerRadius(12)
         .overlay(cardBorder)
+        .padding(.vertical, 8)
     }
 
     private var cardBorder: some View {
