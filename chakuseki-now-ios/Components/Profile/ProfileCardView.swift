@@ -6,24 +6,12 @@ struct ProfileCardView: View {
     let levelProgress: CGFloat
     let remainingExpText: String
 
-    init(
-        records: [AttendanceRecord] = [],
-        levelTitle: String = "レベル〇〇",
-        levelProgress: CGFloat = 0.42,
-        remainingExpText: String = "進化まであと〇〇○EXP!"
-    ) {
-        let derivedInfo = GrowthSystem.levelInfo(for: records)
+    init(records: [AttendanceRecord] = []) {
         self.records = records
-
-        if records.isEmpty {
-            self.levelTitle = "レベル 1"
-            self.levelProgress = 0
-            self.remainingExpText = "進化まであと 180EXP!"
-        } else {
-            self.levelTitle = derivedInfo.levelTitle
-            self.levelProgress = CGFloat(derivedInfo.progressRatio)
-            self.remainingExpText = derivedInfo.remainingExpText
-        }
+        let derivedInfo = GrowthSystem.levelInfo(for: records)
+        self.levelTitle = derivedInfo.levelTitle
+        self.levelProgress = CGFloat(derivedInfo.progressRatio)
+        self.remainingExpText = derivedInfo.remainingExpText
     }
 
     var body: some View {

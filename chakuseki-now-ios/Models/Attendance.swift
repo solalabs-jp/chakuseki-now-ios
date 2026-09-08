@@ -59,7 +59,9 @@ enum GrowthSystem {
 
         let expInCurrentLevel = totalExp % expPerLevel
         let remainingExp = max(0, expPerLevel - expInCurrentLevel)
-        let progressRatio = expPerLevel == 0 ? 0.0 : Double(expInCurrentLevel) / Double(expPerLevel)
+        let progressRatio = level >= maxLevel
+            ? 1.0
+            : (expPerLevel == 0 ? 0.0 : Double(expInCurrentLevel) / Double(expPerLevel))
 
         return GrowthLevelInfo(
             level: level,
