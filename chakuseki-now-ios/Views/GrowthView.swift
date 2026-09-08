@@ -25,13 +25,11 @@ struct GrowthView: View {
         .padding(.horizontal)
         .padding(.bottom)
         .task {
-            if let userId = auth.currentUserId {
-                await viewModel.load(for: userId)
-            }
+            await viewModel.loadIfNeeded(for: auth.currentUserId)
         }
         .onChange(of: auth.currentUserId) { _, newUserId in
             Task {
-                await viewModel.load(for: newUserId)
+                await viewModel.loadIfNeeded(for: newUserId)
             }
         }
     }

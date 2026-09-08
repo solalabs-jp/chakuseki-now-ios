@@ -22,6 +22,24 @@ final class GrowthViewModel {
         self.userId = userId ?? AuthService.shared.currentUserId
     }
 
+    func loadIfNeeded(for userId: String? = nil) async {
+        let targetUserId = userId ?? AuthService.shared.currentUserId
+
+        guard let targetUserId else {
+            await load(for: nil)
+            return
+        }
+
+        let isSameUser = self.userId == targetUserId
+        let isAlreadyLoading = state == .loading
+        let isAlreadyLoaded = state == .loaded
+        guard !(isSameUser && (isAlreadyLoading || isAlreadyLoaded)) else {
+            return
+        }
+
+        await load(for: targetUserId)
+    }
+
     func load(for userId: String? = nil) async {
         // Prefer explicit argument, otherwise use the currently authenticated user.
         // Do NOT fall back to the previously stored `self.userId` when `userId` is nil:
@@ -40,9 +58,13 @@ final class GrowthViewModel {
         self.userId = targetUserId
         state = .loading
         do {
-            records = try await repository.fetchAllRecords(for: targetUserId)
+            let fetched = try await repository.fetchAllRecords(for: targetUserId)
+            // Discard results if sign-out or an account switch happened while fetching.
+            guard self.userId == targetUserId else { return }
+            records = fetched
             state = .loaded
         } catch {
+            guard self.userId == targetUserId else { return }
             records = []
             state = .failed(error.localizedDescription)
         }

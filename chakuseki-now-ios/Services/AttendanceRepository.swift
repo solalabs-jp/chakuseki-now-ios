@@ -26,24 +26,7 @@ struct AttendanceRepository {
             .whereField("userId", isEqualTo: userId)
             .getDocuments()
 
-        let records = snapshot.documents.compactMap { document -> AttendanceRecord? in
-            let data = document.data()
-            guard
-                let statusValue = data["status"] as? String,
-                let status = AttendanceStatus(firestoreValue: statusValue),
-                let timestamp = (data["confirmedAt"] as? Timestamp)?.dateValue()
-                    ?? (data["firstDetectedAt"] as? Timestamp)?.dateValue()
-                    ?? (data["lastDetectedAt"] as? Timestamp)?.dateValue()
-            else {
-                return nil
-            }
-
-            return AttendanceRecord(
-                sessionNumber: 0,
-                date: timestamp,
-                status: status
-            )
-        }
+        let records = snapshot.documents.compactMap(AttendanceRecord.init(fromFirestore:))
 
         return records.sorted { $0.date < $1.date }
     }
@@ -83,17 +66,13 @@ struct AttendanceRepository {
         // attendanceRecords をこの科目の分だけに絞る
         let dated: [(date: Date, status: AttendanceStatus)] = recordsSnapshot.documents.compactMap { document in
             let data = document.data()
-            guard let statusValue = data["status"] as? String,
-                  let status = AttendanceStatus(firestoreValue: statusValue),
+            guard let record = AttendanceRecord(fromFirestore: document),
                   let sessionId = data["sessionId"] as? String,
                   let dailyId = sessionToDaily[sessionId],
                   scheduleDailyIds.contains(dailyId) else {
                 return nil
             }
-            let timestamp = (data["confirmedAt"] as? Timestamp)
-                ?? (data["firstDetectedAt"] as? Timestamp)
-                ?? (data["lastDetectedAt"] as? Timestamp)
-            return (timestamp?.dateValue() ?? .distantPast, status)
+            return (record.date, record.status)
         }
 
         let numbered = dated
@@ -107,5 +86,22 @@ struct AttendanceRepository {
             records: Array(numbered.reversed()),
             totalSessions: max(completedCount, numbered.count)
         )
+    }
+}
+
+private extension AttendanceRecord {
+    init?(fromFirestore document: QueryDocumentSnapshot) {
+        let data = document.data()
+        guard
+            let statusValue = data["status"] as? String,
+            let status = AttendanceStatus(firestoreValue: statusValue),
+            let timestamp = (data["confirmedAt"] as? Timestamp)?.dateValue()
+                ?? (data["firstDetectedAt"] as? Timestamp)?.dateValue()
+                ?? (data["lastDetectedAt"] as? Timestamp)?.dateValue()
+        else {
+            return nil
+        }
+
+        self.init(sessionNumber: 0, date: timestamp, status: status)
     }
 }
