@@ -8,13 +8,11 @@ struct ProfileCardView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .top) {
-            ProfileLevelSectionView(
-                levelTitle: levelInfo.levelTitle,
-                levelProgress: CGFloat(levelInfo.progressRatio),
-                remainingExpText: levelInfo.remainingExpText
-            )
-        }
+        ProfileLevelSectionView(
+            levelTitle: levelInfo.levelTitle,
+            levelProgress: CGFloat(levelInfo.progressRatio),
+            remainingExpText: levelInfo.remainingExpText
+        )
         .frame(maxWidth: .infinity)
         .background(AppColors.white)
         .cornerRadius(12)

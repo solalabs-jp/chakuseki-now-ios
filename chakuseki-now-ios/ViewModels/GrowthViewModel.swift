@@ -4,8 +4,6 @@ import Observation
 @MainActor
 @Observable
 final class GrowthViewModel {
-    static let fallbackUserId = "student-001"
-
     private let repository: AttendanceRepository
     private var userId: String?
 

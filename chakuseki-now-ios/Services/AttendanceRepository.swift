@@ -94,13 +94,18 @@ private extension AttendanceRecord {
         let data = document.data()
         guard
             let statusValue = data["status"] as? String,
-            let status = AttendanceStatus(firestoreValue: statusValue),
-            let timestamp = (data["confirmedAt"] as? Timestamp)?.dateValue()
-                ?? (data["firstDetectedAt"] as? Timestamp)?.dateValue()
-                ?? (data["lastDetectedAt"] as? Timestamp)?.dateValue()
+            let status = AttendanceStatus(firestoreValue: statusValue)
         else {
             return nil
         }
+
+        // Some legacy/manual records may only have a subset of timestamp fields or none at all.
+        // Preserve them instead of dropping them: they still count as attendance history and should
+        // not reduce `totalSessions` when `numbered.count` is used for the fallback branch.
+        let timestamp = (data["confirmedAt"] as? Timestamp)?.dateValue()
+            ?? (data["firstDetectedAt"] as? Timestamp)?.dateValue()
+            ?? (data["lastDetectedAt"] as? Timestamp)?.dateValue()
+            ?? .distantPast
 
         self.init(sessionNumber: 0, date: timestamp, status: status)
     }

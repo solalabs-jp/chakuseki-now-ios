@@ -16,7 +16,31 @@ struct GrowthView: View {
                         }
                     }
 
-                    ProfileCardView(levelInfo: viewModel.levelInfo)
+                    switch viewModel.state {
+                    case .idle, .loading:
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
+                            .padding(.top, 24)
+
+                    case .failed(let message):
+                        VStack(spacing: 8) {
+                            Text("読み込みに失敗しました")
+                                .font(.headline)
+                            Text(message)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
+                            Button("再試行") {
+                                Task { await viewModel.loadIfNeeded(for: auth.currentUserId) }
+                            }
+                            .padding(.top, 4)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 24)
+
+                    case .loaded:
+                        ProfileCardView(levelInfo: viewModel.levelInfo)
+                    }
                 }
                 .padding(.top, 24)
             }

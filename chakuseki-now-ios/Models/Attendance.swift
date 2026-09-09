@@ -60,15 +60,23 @@ enum GrowthSystem {
         let progressRatio = level >= maxLevel
             ? 1.0
             : Double(expInCurrentLevel) / Double(expPerLevel)
+        let percentText = Int((progressRatio * 100).rounded())
+
+        let remainingExpText: String
+        if totalExp == 0 {
+            remainingExpText = "Lv\(level) / \(totalExp)EXP / \(percentText)%"
+        } else if level >= maxLevel {
+            remainingExpText = "最大レベルです"
+        } else {
+            remainingExpText = "進化まであと \(remainingExp)EXP!"
+        }
 
         return GrowthLevelInfo(
             level: level,
             currentExp: totalExp,
             progressRatio: progressRatio,
             levelTitle: "レベル \(level)",
-            remainingExpText: level >= maxLevel
-                ? "最大レベルです"
-                : "進化まであと \(remainingExp)EXP!"
+            remainingExpText: remainingExpText
         )
     }
 }
