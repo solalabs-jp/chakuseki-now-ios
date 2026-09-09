@@ -17,11 +17,11 @@
 flowchart TB
     subgraph Student["生徒（iOS）"]
         iOS["chakuseki-now-ios<br/>SwiftUI アプリ"]
-        Beacon["教卓の BLE ビーコン"]
     end
 
     subgraph Teacher["教員・管理者（ブラウザ）"]
         Web["chakuseki-now-web<br/>Next.js コンソール"]
+        Beacon["教卓の BLE ビーコン(Beacon Advertiser)"]
     end
 
     subgraph Firebase["Firebase プロジェクト: chakuseki-now"]
