@@ -21,8 +21,7 @@ struct ProfileLevelSectionView: View {
                     .font(.system(size: 17))
                     .foregroundColor(AppColors.black)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading, 111)
+            .frame(maxWidth: .infinity, alignment: .center)
 
             VStack(alignment: .leading, spacing: 0) {
                 Text("EXP")
@@ -52,8 +51,9 @@ struct ProfileLevelSectionView: View {
             .frame(maxWidth: .infinity)
             .padding(.horizontal, 17)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .padding(.top, 241)
+        .frame(maxWidth: .infinity, alignment: .top)
+        .padding(.top, 24)
+        .padding(.bottom, 24)
     }
 }
 

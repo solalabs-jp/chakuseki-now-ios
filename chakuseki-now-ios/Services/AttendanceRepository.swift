@@ -20,6 +20,17 @@ struct AttendanceRepository {
         let totalSessions: Int
     }
 
+    /// 指定ユーザーの、全出席履歴を取得する。
+    func fetchAllRecords(for userId: String) async throws -> [AttendanceRecord] {
+        let snapshot = try await db.collection("attendanceRecords")
+            .whereField("userId", isEqualTo: userId)
+            .getDocuments()
+
+        let records = snapshot.documents.compactMap(AttendanceRecord.init(fromFirestore:))
+
+        return records.sorted { $0.date < $1.date }
+    }
+
     /// 指定ユーザーの、指定科目（`scheduleId`）に紐づく出席履歴を取得する。
     func fetchSubjectHistory(for userId: String, scheduleId: String) async throws -> SubjectHistory {
         async let recordsTask = db.collection("attendanceRecords")
@@ -55,17 +66,13 @@ struct AttendanceRepository {
         // attendanceRecords をこの科目の分だけに絞る
         let dated: [(date: Date, status: AttendanceStatus)] = recordsSnapshot.documents.compactMap { document in
             let data = document.data()
-            guard let statusValue = data["status"] as? String,
-                  let status = AttendanceStatus(firestoreValue: statusValue),
+            guard let record = AttendanceRecord(fromFirestore: document),
                   let sessionId = data["sessionId"] as? String,
                   let dailyId = sessionToDaily[sessionId],
                   scheduleDailyIds.contains(dailyId) else {
                 return nil
             }
-            let timestamp = (data["confirmedAt"] as? Timestamp)
-                ?? (data["firstDetectedAt"] as? Timestamp)
-                ?? (data["lastDetectedAt"] as? Timestamp)
-            return (timestamp?.dateValue() ?? .distantPast, status)
+            return (record.date, record.status)
         }
 
         let numbered = dated
@@ -79,5 +86,27 @@ struct AttendanceRepository {
             records: Array(numbered.reversed()),
             totalSessions: max(completedCount, numbered.count)
         )
+    }
+}
+
+private extension AttendanceRecord {
+    init?(fromFirestore document: QueryDocumentSnapshot) {
+        let data = document.data()
+        guard
+            let statusValue = data["status"] as? String,
+            let status = AttendanceStatus(firestoreValue: statusValue)
+        else {
+            return nil
+        }
+
+        // Some legacy/manual records may only have a subset of timestamp fields or none at all.
+        // Preserve them instead of dropping them: they still count as attendance history and should
+        // not reduce `totalSessions` when `numbered.count` is used for the fallback branch.
+        let timestamp = (data["confirmedAt"] as? Timestamp)?.dateValue()
+            ?? (data["firstDetectedAt"] as? Timestamp)?.dateValue()
+            ?? (data["lastDetectedAt"] as? Timestamp)?.dateValue()
+            ?? .distantPast
+
+        self.init(sessionNumber: 0, date: timestamp, status: status)
     }
 }
