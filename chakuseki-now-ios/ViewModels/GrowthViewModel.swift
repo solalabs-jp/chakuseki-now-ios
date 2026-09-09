@@ -12,6 +12,10 @@ final class GrowthViewModel {
     var records: [AttendanceRecord] = []
     var state: LoadState = .idle
 
+    var levelInfo: GrowthLevelInfo {
+        GrowthSystem.levelInfo(for: records)
+    }
+
     init(
         repository: AttendanceRepository = AttendanceRepository(),
         userId: String? = nil

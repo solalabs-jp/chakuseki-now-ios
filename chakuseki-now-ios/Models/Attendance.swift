@@ -53,15 +53,13 @@ enum GrowthSystem {
     }
 
     static func levelInfo(for records: [AttendanceRecord]) -> GrowthLevelInfo {
-        let totalExp = max(0, totalExp(from: records))
-        let rawLevel = totalExp / expPerLevel
-        let level = min(maxLevel, rawLevel + 1)
-
+        let totalExp = totalExp(from: records)
         let expInCurrentLevel = totalExp % expPerLevel
-        let remainingExp = max(0, expPerLevel - expInCurrentLevel)
+        let remainingExp = expPerLevel - expInCurrentLevel
+        let level = min(maxLevel, totalExp / expPerLevel + 1)
         let progressRatio = level >= maxLevel
             ? 1.0
-            : (expPerLevel == 0 ? 0.0 : Double(expInCurrentLevel) / Double(expPerLevel))
+            : Double(expInCurrentLevel) / Double(expPerLevel)
 
         return GrowthLevelInfo(
             level: level,

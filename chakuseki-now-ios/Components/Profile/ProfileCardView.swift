@@ -1,25 +1,18 @@
 import SwiftUI
 
 struct ProfileCardView: View {
-    let records: [AttendanceRecord]
-    let levelTitle: String
-    let levelProgress: CGFloat
-    let remainingExpText: String
+    let levelInfo: GrowthLevelInfo
 
-    init(records: [AttendanceRecord] = []) {
-        self.records = records
-        let derivedInfo = GrowthSystem.levelInfo(for: records)
-        self.levelTitle = derivedInfo.levelTitle
-        self.levelProgress = CGFloat(derivedInfo.progressRatio)
-        self.remainingExpText = derivedInfo.remainingExpText
+    init(levelInfo: GrowthLevelInfo = GrowthSystem.levelInfo(for: [])) {
+        self.levelInfo = levelInfo
     }
 
     var body: some View {
         ZStack(alignment: .top) {
             ProfileLevelSectionView(
-                levelTitle: levelTitle,
-                levelProgress: levelProgress,
-                remainingExpText: remainingExpText
+                levelTitle: levelInfo.levelTitle,
+                levelProgress: CGFloat(levelInfo.progressRatio),
+                remainingExpText: levelInfo.remainingExpText
             )
         }
         .frame(maxWidth: .infinity)

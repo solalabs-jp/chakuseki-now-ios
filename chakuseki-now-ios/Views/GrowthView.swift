@@ -16,7 +16,7 @@ struct GrowthView: View {
                         }
                     }
 
-                    ProfileCardView(records: viewModel.records)
+                    ProfileCardView(levelInfo: viewModel.levelInfo)
                 }
                 .padding(.top, 24)
             }
