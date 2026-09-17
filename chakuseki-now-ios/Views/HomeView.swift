@@ -11,9 +11,12 @@ struct HomeView: View {
     @State private var isRestoring = true
     @State private var checkIn = AttendanceCheckInService()
     @StateObject private var beaconManager = BeaconManager()
+    @State private var connectingWatchdogTask: Task<Void, Never>? = nil
 
     /// 教員ビーコンが1つも取得できなかった場合のフォールバック（検索UIと揃える）。
     private let fallbackBeaconUUID = UUID(uuidString: "01020304-0506-0708-090A-0B0C0D0E0F10")
+    /// コメント送信（出席確定）前に、この秒数以上ビーコンを検知できなければ見失ったとみなし検索画面に戻す。
+    private static let connectingLossThresholdSeconds: TimeInterval = 30
 
     var teacherName: String? {
         if let resolved = checkIn.teacherName, !resolved.isEmpty {
@@ -54,6 +57,7 @@ struct HomeView: View {
                 ) { uuid in
                     detectedUUID = uuid
                     currentStatus = .connecting
+                    startConnectingWatchdog()
                     Task { await checkIn.handleBeaconDetected(uuid: uuid) }
                 }
 
@@ -167,6 +171,8 @@ struct HomeView: View {
 
     /// ホームタブ再選択時: 送信済みなら結果画面を復元、なければ検索から開始
     private func resetToFirstPage() async {
+        connectingWatchdogTask?.cancel()
+        connectingWatchdogTask = nil
         checkIn.reset()
         beaconManager.stop()
         submittedAnswer = nil
@@ -174,6 +180,25 @@ struct HomeView: View {
         detectedUUID = nil
         currentStatus = .searching
         await restoreOrSearch()
+    }
+
+    /// コメント送信（出席確定）前にビーコンを見失ったら検索画面に自動で戻す監視タスク。
+    /// 確定後は `startMonitoring` の滞在監視に役割が引き継がれるため停止する。
+    private func startConnectingWatchdog() {
+        connectingWatchdogTask?.cancel()
+        connectingWatchdogTask = Task {
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: 5_000_000_000)
+                if Task.isCancelled { break }
+                if checkIn.phase == .confirmed { break }
+                guard currentStatus == .connecting else { break }
+                let elapsed = beaconManager.lastSeenAt.map { Date().timeIntervalSince($0) }
+                if elapsed == nil || elapsed! > Self.connectingLossThresholdSeconds {
+                    await resetToFirstPage()
+                    break
+                }
+            }
+        }
     }
 }
 

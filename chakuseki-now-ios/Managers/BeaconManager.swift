@@ -74,9 +74,9 @@ final class BeaconManager: NSObject, ObservableObject, CLLocationManagerDelegate
         didRange beacons: [CLBeacon],
         satisfying beaconConstraint: CLBeaconIdentityConstraint
     ) {
-        // 空配列は「このUUIDは今この瞬間 圏内に無い」の通知なので lastSeenAt は更新しない。
-        guard !beacons.isEmpty else { return }
-        let beacon = beacons.first(where: { $0.proximity != .unknown }) ?? beacons[0]
+        // 空配列、または proximity が unknown のみの配列は「実際には圏内に無い/測距不安定」の
+        // 通知であり信頼できないため、既知の proximity を持つビーコンが無ければ検知扱いにしない。
+        guard let beacon = beacons.first(where: { $0.proximity != .unknown }) else { return }
 
         DispatchQueue.main.async {
             self.detectedUUID = beacon.uuid
