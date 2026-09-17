@@ -19,10 +19,6 @@ struct HomeView: View {
         if let resolved = checkIn.teacherName, !resolved.isEmpty {
             return resolved
         }
-        guard let uuidString = detectedUUID?.uuidString.uppercased() else { return nil }
-        if uuidString == "01020304-0506-0708-090A-0B0C0D0E0F10" {
-            return "れんし"
-        }
         return nil
     }
 
